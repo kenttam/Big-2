@@ -174,10 +174,10 @@ Game.prototype.isFourOfaKind = function(cards){
 		cardsInRank.push(cards[y].numericalRank);
 	}
 	cardsInRank.sort();
-	if(cardsInRank[0] == cardsInRank[1] && cardsInRank[1] == cardsInRank[2] && cardsInRank[2] == cardsInRank[3])
+	if(cardsInRank[0] == cardsInRank[1] && cardsInRank[1] == cardsInRank[2] && cardsInRank[2] == cardsInRank[3]){
 		return true;
 	}
-	if(cardsInRank[1] == cardsInRank[2] && cardsInRank[2] == cardsInRank[3] && cardsInRank[3] == cardsInRank[4])
+	if(cardsInRank[1] == cardsInRank[2] && cardsInRank[2] == cardsInRank[3] && cardsInRank[3] == cardsInRank[4]){
 		return true;
 	}
 	return false;
