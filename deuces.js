@@ -97,6 +97,16 @@ Player.prototype.act = function(cardIndexes){
 		}
 	}
 
+	if(this.game.state == 2){ //everyone else has passed
+		if(this.game.isSingle(cardsToPlay) || this.game.isPair(cardsToPlay) || this.game.isFiveCardPlay(cardsToPlay)){
+			this.game.putCardsInCenter(this, cardsToPlay);
+			removeByIndexes(this.hand, cardIndexes);
+			return true;
+		}
+		else
+			return false;
+	}
+
 	if(this.game.isSingle(cardsToPlay) && this.game.validSingleCardPlay(this.game.center, cardsToPlay)){
 		this.game.putCardsInCenter(this, cardsToPlay);
 		removeByIndexes(this.hand, cardIndexes);
@@ -118,13 +128,12 @@ Player.prototype.act = function(cardIndexes){
 
 }
 
-
-
 function Game(){
 	this.deck = new Deck();
 	this.players = [new Player(this), new Player(this), new Player(this), new Player(this)];
 	this.center = [];
 	this.centerHistory = [];
+	this.playersPassed = 0;
 	//this.whoseTurn = Math.floor(Math.random()*this.players.length); turn is determined by player holding the diamond 3 or last winner
 }
 
@@ -140,6 +149,7 @@ Game.prototype.start = function(){
 		}
 	}
 	this.state = 0;
+	$(".player").eq(this.whoseTurn).addClass("myTurn");
 }
 
 Game.prototype.passOutCards = function(){
@@ -182,10 +192,12 @@ Game.prototype.putCardsInCenter = function(player, cards){
 }
 
 Game.prototype.yieldToNextPlayer = function(){
+	$(".myTurn").removeClass("myTurn");
 	if(this.whoseTurn < 3)
 		this.whoseTurn ++;
 	else
 		this.whoseTurn = 0;
+	$(".player").eq(this.whoseTurn).addClass("myTurn");
 }
 
 Game.prototype.processTurn = function(){
@@ -200,6 +212,9 @@ Game.prototype.checkMove = function(){
 }
 
 Game.prototype.validSingleCardPlay = function(inCenter, played){
+	if(inCenter.length != 1){
+		return false;
+	}
 	if(played[0].numericalRank > inCenter[0].numericalRank)
 		return true;
 	if(played[0].numericalRank == inCenter[0].numericalRank && played[0].suitRank > inCenter[0].suitRank)
@@ -208,6 +223,9 @@ Game.prototype.validSingleCardPlay = function(inCenter, played){
 }
 
 Game.prototype.validPairPlay = function(inCenter, played){
+	if(inCenter.length != 2){
+		return false;
+	}
 	if(played[0].numericalRank > inCenter[0].numericalRank){
 		return true;
 	}
@@ -220,6 +238,9 @@ Game.prototype.validPairPlay = function(inCenter, played){
 }
 
 Game.prototype.validFiveCardPlay = function(inCenter, played){
+	if(inCenter.length != 5){
+		return false;
+	}
 	var inCenterRank = game.fiveCardsPlayMap(inCenter),
 		playedRank = game.fiveCardsPlayMap(played);
 	if(playedRank > inCenterRank){
@@ -407,23 +428,23 @@ var player2 = game.players[1];
 
 for(var n = 0; n < game.players.length;  n++){
 	var currentPlayer = game.players[n];
-	var $current = jQuery(".players").eq(n);
+	var $current = jQuery(".player").eq(n);
 	for(var m = 0; m < currentPlayer.hand.length; m++){
 		var item = currentPlayer.hand[m];
 		var $ul = $current.find('ul');
-		$ul.append("<li>" + item.rank + " of " + item.suit+ " ,</li> "); //append the element
+		$ul.append("<li>" + item.rank + " of " + item.suit+ "</li> "); //append the element
 		$ul.find('li').last().data("card", item); //and then attach the card data to it
 	}
 }
 
-$(".players").find("li").click(function(){
+$(".player").find("li").click(function(){
 	//console.log($(this).data().card);
 	$(this).toggleClass("selected");
 });
 
 $("#play-button").click(function(){
 	var whoseTurn = game.whoseTurn;
-	var $currentPlayer = $(".players").eq(whoseTurn);
+	var $currentPlayer = $(".player").eq(whoseTurn);
 	var cardsInPlay = $currentPlayer.find('.selected');
 	if(cardsInPlay.length != 1 && cardsInPlay.length != 2 && cardsInPlay.length != 5){
 		alert("Please play the appropriate amount of cards");
@@ -434,8 +455,24 @@ $("#play-button").click(function(){
 		indexes.push($currentPlayer.find("li").index(cardsInPlay[x]));
 	}
 	if(game.players[whoseTurn].act(indexes)){ //if it's a valid move, have to remove those cards from the gui
+		$("#center").html("");
+		cardsInPlay.clone().appendTo("#center");
 		cardsInPlay.remove();
+		game.playersPassed = 0;
 	}
+	return false;
+});
+
+$("#pass-button").click(function(){
+	if(game.state != 1){
+		return false;
+	}
+	game.playersPassed ++;
+	game.yieldToNextPlayer();
+	if(game.playersPassed == 3){
+		game.state = 2;
+	}
+	return false;
 });
 
 //the game has a few states.
