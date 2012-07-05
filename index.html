@@ -1,7 +1,23 @@
 <html>
 <head>
 	<title>Deuces</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<!--link rel="stylesheet" type="text/css" href="style.css"-->
+	<style>
+		.selected, .myTurn h1{
+			color:red;
+		}
+
+		#play-button{
+			position:fixed;
+			right:500px;
+		}
+
+		#pass-button{
+			position:fixed;
+			top:50px;
+			right:500px;
+		}
+	</style>
 </head>
 <body>
 	<a href="#" id="play-button">Play!</a>
@@ -25,5 +41,59 @@
 	</section>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="deuces.js" type="text/javascript"></script>
+<!--script src="deuces.js" type="text/javascript"></script-->
+<script>
+	var game;
+	$(document).ready(function(){
+		$.post('http://localhost:8888/loadCards', function(data){
+			game = data;
+			for(var n = 0; n < game.players.length;  n++){
+				var currentPlayer = game.players[n];
+				var $current = jQuery(".player").eq(n);
+				for(var m = 0; m < currentPlayer.hand.length; m++){
+					var item = currentPlayer.hand[m];
+					var $ul = $current.find('ul');
+					$ul.append("<li>" + item.rank + " of " + item.suit+ "</li> "); //append the element
+					$ul.find('li').last().data("card", item); //and then attach the card data to it
+				}
+			}
+			$(".player").find("li").click(function(){
+				$(this).toggleClass("selected");
+			});
+			$(".player").eq(game.whoseTurn).addClass("myTurn");
+		});
+	});
+	$("#play-button").click(function(){
+		var whoseTurn = game.whoseTurn;
+		var $currentPlayer = $(".player").eq(whoseTurn);
+		var cardsInPlay = $currentPlayer.find('.selected');
+		if(cardsInPlay.length != 1 && cardsInPlay.length != 2 && cardsInPlay.length != 5){
+			alert("Please play the appropriate amount of cards");
+			return false;
+		}
+		var indexes = [];
+		for(var x = 0; x < cardsInPlay.length; x++){
+			indexes.push($currentPlayer.find("li").index(cardsInPlay[x]));
+		}
+		//this is where ajax needs to be used.
+		var s_indexes = JSON.stringify(indexes);
+		$.post('http://localhost:8888/act', s_indexes, function(data) {
+			if(data === "true") //this means that the action was successful
+			{
+				$("#center").html("");
+				cardsInPlay.clone().appendTo("#center");
+				cardsInPlay.remove();
+			}
+		});
+		return false;
+	});
+	$("#pass-button").click(function(){
+		$.post('http://localhost:8888/pass', function(data) {
+			if(data === "true"){
+				$(".myTurn").removeClass("myTurn");
+				$(".player").eq(this.whoseTurn).addClass("myTurn");
+			}
+		});
+	});
+</script>
 </html>

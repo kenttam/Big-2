@@ -1,3 +1,5 @@
+//(function(){
+
 var ranks = [3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A", 2];
 
 var numericalRanks = invert(ranks);
@@ -66,9 +68,8 @@ function hasDiamondThree(cards){ //returns true if it has Diamond 3, false other
 	return false;
 }
 
-function Player(game){
+function Player(){
 	this.hand = [];
-	this.game = game;
 }
 
 Player.prototype.act = function(cardIndexes){
@@ -82,11 +83,12 @@ Player.prototype.act = function(cardIndexes){
 		cardsToPlay.push(this.hand[cardIndexes[key]]); //shouldnt pop until the end after verifying it's a valid move
 	}
 
-	if(this.game.state == 0){ //this represents the beginning of the game where the player can play anything he wants as long as the hand is valid and include the diamond 3
+	if(game.state == 0){ //this represents the beginning of the game where the player can play anything he wants as long as the hand is valid and include the diamond 3
 		if(hasDiamondThree(cardsToPlay)){
-			if(this.game.isSingle(cardsToPlay) || this.game.isPair(cardsToPlay) || this.game.isFiveCardPlay(cardsToPlay)){
-				this.game.putCardsInCenter(this, cardsToPlay);
+			if(game.isSingle(cardsToPlay) || game.isPair(cardsToPlay) || game.isFiveCardPlay(cardsToPlay)){
+				game.putCardsInCenter(this, cardsToPlay);
 				removeByIndexes(this.hand, cardIndexes);
+				game.playersPassed = 0;
 				return true;
 			}
 			else
@@ -97,30 +99,34 @@ Player.prototype.act = function(cardIndexes){
 		}
 	}
 
-	if(this.game.state == 2){ //everyone else has passed
-		if(this.game.isSingle(cardsToPlay) || this.game.isPair(cardsToPlay) || this.game.isFiveCardPlay(cardsToPlay)){
-			this.game.putCardsInCenter(this, cardsToPlay);
+	if(game.state == 2){ //everyone else has passed
+		if(game.isSingle(cardsToPlay) || game.isPair(cardsToPlay) || game.isFiveCardPlay(cardsToPlay)){
+			game.putCardsInCenter(this, cardsToPlay);
 			removeByIndexes(this.hand, cardIndexes);
+			game.playersPassed = 0;
 			return true;
 		}
 		else
 			return false;
 	}
 
-	if(this.game.isSingle(cardsToPlay) && this.game.validSingleCardPlay(this.game.center, cardsToPlay)){
-		this.game.putCardsInCenter(this, cardsToPlay);
+	if(game.isSingle(cardsToPlay) && game.validSingleCardPlay(game.center, cardsToPlay)){
+		game.putCardsInCenter(this, cardsToPlay);
 		removeByIndexes(this.hand, cardIndexes);
+		game.playersPassed = 0;
 		return true;
 	}
-	if(this.game.isPair(cardsToPlay) && this.game.validPairPlay(this.game.center, cardsToPlay)){
-		this.game.putCardsInCenter(this, cardsToPlay);
+	if(game.isPair(cardsToPlay) && game.validPairPlay(game.center, cardsToPlay)){
+		game.putCardsInCenter(this, cardsToPlay);
 		removeByIndexes(this.hand, cardIndexes);
+		game.playersPassed = 0;
 		return true;
 	}
 	if(cardsToPlay.length == 5){
-		if(validFiveCardPlay(this.game.center, cardsToPlay)){
-			this.game.putCardsInCenter(this, cardsToPlay);
+		if(validFiveCardPlay(game.center, cardsToPlay)){
+			game.putCardsInCenter(this, cardsToPlay);
 			removeByIndexes(this.hand, cardIndexes);
+			game.playersPassed = 0;
 			return true;
 		}
 	}
@@ -130,7 +136,7 @@ Player.prototype.act = function(cardIndexes){
 
 function Game(){
 	this.deck = new Deck();
-	this.players = [new Player(this), new Player(this), new Player(this), new Player(this)];
+	this.players = [new Player(), new Player(), new Player(), new Player()];
 	this.center = [];
 	this.centerHistory = [];
 	this.playersPassed = 0;
@@ -149,7 +155,7 @@ Game.prototype.start = function(){
 		}
 	}
 	this.state = 0;
-	$(".player").eq(this.whoseTurn).addClass("myTurn");
+	//$(".player").eq(this.whoseTurn).addClass("myTurn");
 }
 
 Game.prototype.passOutCards = function(){
@@ -192,12 +198,15 @@ Game.prototype.putCardsInCenter = function(player, cards){
 }
 
 Game.prototype.yieldToNextPlayer = function(){
-	$(".myTurn").removeClass("myTurn");
-	if(this.whoseTurn < 3)
+	//$(".myTurn").removeClass("myTurn");
+	if(this.whoseTurn < 3){
 		this.whoseTurn ++;
-	else
+	}
+	else{
 		this.whoseTurn = 0;
-	$(".player").eq(this.whoseTurn).addClass("myTurn");
+	}
+	return true;
+	//$(".player").eq(this.whoseTurn).addClass("myTurn");
 }
 
 Game.prototype.processTurn = function(){
@@ -419,61 +428,17 @@ function cardComparison(card1, card2){
 var game = new Game;
 
 game.start();
-var player1 = game.players[0];
-//player1.hand.sort(cardComparison);
-//game.center = [player1.hand[0], player1.hand[1]];
-var player2 = game.players[1];
-//player2.hand.sort(cardComparison);
-//game.print();
 
 for(var n = 0; n < game.players.length;  n++){
 	var currentPlayer = game.players[n];
-	var $current = jQuery(".player").eq(n);
 	for(var m = 0; m < currentPlayer.hand.length; m++){
 		var item = currentPlayer.hand[m];
-		var $ul = $current.find('ul');
-		$ul.append("<li>" + item.rank + " of " + item.suit+ "</li> "); //append the element
-		$ul.find('li').last().data("card", item); //and then attach the card data to it
 	}
 }
 
-$(".player").find("li").click(function(){
-	//console.log($(this).data().card);
-	$(this).toggleClass("selected");
-});
+exports.game = game;
 
-$("#play-button").click(function(){
-	var whoseTurn = game.whoseTurn;
-	var $currentPlayer = $(".player").eq(whoseTurn);
-	var cardsInPlay = $currentPlayer.find('.selected');
-	if(cardsInPlay.length != 1 && cardsInPlay.length != 2 && cardsInPlay.length != 5){
-		alert("Please play the appropriate amount of cards");
-		return false;
-	}
-	var indexes = [];
-	for(var x = 0; x < cardsInPlay.length; x++){
-		indexes.push($currentPlayer.find("li").index(cardsInPlay[x]));
-	}
-	if(game.players[whoseTurn].act(indexes)){ //if it's a valid move, have to remove those cards from the gui
-		$("#center").html("");
-		cardsInPlay.clone().appendTo("#center");
-		cardsInPlay.remove();
-		game.playersPassed = 0;
-	}
-	return false;
-});
-
-$("#pass-button").click(function(){
-	if(game.state != 1){
-		return false;
-	}
-	game.playersPassed ++;
-	game.yieldToNextPlayer();
-	if(game.playersPassed == 3){
-		game.state = 2;
-	}
-	return false;
-});
+//})();
 
 //the game has a few states.
 //State 1: Beginning of the game. Diamond 3 goes first. The Diamond 3 must be part of the play. Winner goes first in subsequent games, but worrying about that later;
