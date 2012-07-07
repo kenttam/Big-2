@@ -1,5 +1,6 @@
 var http = require("http");
 var url = require("url");
+var app = require('express');
 
 
 function start(route, handle, deuces) {
@@ -7,6 +8,7 @@ function start(route, handle, deuces) {
     var postData = "";
     var pathname = url.parse(request.url).pathname;
     console.log("Request for " + pathname + " received.");
+    console.log(request);
 
     request.setEncoding("utf8");
 
@@ -18,11 +20,14 @@ function start(route, handle, deuces) {
 
     request.addListener("end", function() {
       route(handle, pathname, response, postData, deuces);
+      //console.log(request.session.user_id);
     });
+
+    //request.session.user_id = "123";
 
   }
 
-  http.createServer(onRequest).listen(8888);
+  app.createServer(onRequest).listen(8888);
   console.log("Server has started.");
 
 }

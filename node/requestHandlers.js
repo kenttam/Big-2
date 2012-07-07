@@ -20,7 +20,7 @@ function start(response, postData, deuces) {
         if (err) {
             throw err; 
         }       
-        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.writeHead(200, {"Content-Type": "text/html"});  
         response.write(html);  
         response.end();  
     });

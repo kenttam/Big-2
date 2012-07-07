@@ -45,7 +45,7 @@
 <script>
 	var game;
 	$(document).ready(function(){
-		$.post('http://localhost:8888/loadCards', function(data){
+		$.get('http://localhost:8888/loadCards', function(data){
 			game = data;
 			for(var n = 0; n < game.players.length;  n++){
 				var currentPlayer = game.players[n];
@@ -76,22 +76,28 @@
 			indexes.push($currentPlayer.find("li").index(cardsInPlay[x]));
 		}
 		//this is where ajax needs to be used.
-		var s_indexes = JSON.stringify(indexes);
-		$.post('http://localhost:8888/act', s_indexes, function(data) {
-			if(data === "true") //this means that the action was successful
+		//var s_indexes = JSON.stringify('indexes': indexes);
+		var x_indexes = {'indexes' : indexes};
+		$.post('http://localhost:8888/act', x_indexes, function(u_data) {
+			var data = JSON.parse(u_data);
+			if(data.successful === true) //this means that the action was successful
 			{
 				$("#center").html("");
 				cardsInPlay.clone().appendTo("#center");
 				cardsInPlay.remove();
+				var i = $(".player").index(".myTurn");
+				$(".myTurn").removeClass("myTurn");
+				$(".player").eq(data.game.whoseTurn).addClass("myTurn");
 			}
 		});
 		return false;
 	});
 	$("#pass-button").click(function(){
-		$.post('http://localhost:8888/pass', function(data) {
-			if(data === "true"){
+		$.post('http://localhost:8888/pass', function(u_data) {
+			var data = JSON.parse(u_data);
+			if(data.successful === true){
 				$(".myTurn").removeClass("myTurn");
-				$(".player").eq(this.whoseTurn).addClass("myTurn");
+				$(".player").eq(data.game.whoseTurn).addClass("myTurn");
 			}
 		});
 	});
