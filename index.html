@@ -48,6 +48,9 @@
 		$.get('http://localhost:8888/loadCards', function(data){
 			game = data;
 			for(var n = 0; n < game.players.length;  n++){
+				if(!(game.players[n])){
+					continue;
+				}
 				var currentPlayer = game.players[n];
 				var $current = jQuery(".player").eq(n);
 				for(var m = 0; m < currentPlayer.hand.length; m++){

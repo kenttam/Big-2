@@ -140,6 +140,7 @@ function Game(){
 	this.center = [];
 	this.centerHistory = [];
 	this.playersPassed = 0;
+	this.start();
 	//this.whoseTurn = Math.floor(Math.random()*this.players.length); turn is determined by player holding the diamond 3 or last winner
 }
 
@@ -436,7 +437,7 @@ for(var n = 0; n < game.players.length;  n++){
 	}
 }
 
-exports.game = game;
+exports.game = Game;
 
 //})();
 
