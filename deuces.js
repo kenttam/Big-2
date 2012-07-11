@@ -68,8 +68,10 @@ function hasDiamondThree(cards){ //returns true if it has Diamond 3, false other
 	return false;
 }
 
-function Player(){
+function Player(index){
 	this.hand = [];
+	this.lastPlayed = null;
+	this.playerNum = index;
 }
 
 Player.prototype.act = function(cardIndexes){
@@ -86,10 +88,9 @@ Player.prototype.act = function(cardIndexes){
 	if(game.state == 0){ //this represents the beginning of the game where the player can play anything he wants as long as the hand is valid and include the diamond 3
 		if(hasDiamondThree(cardsToPlay)){
 			if(game.isSingle(cardsToPlay) || game.isPair(cardsToPlay) || game.isFiveCardPlay(cardsToPlay)){
-				game.putCardsInCenter(this, cardsToPlay);
-				removeByIndexes(this.hand, cardIndexes);
-				game.playersPassed = 0;
-				return true;
+				endTurn(this, cardsToPlay, cardIndexes);
+				var returnObj = { cards: cardsToPlay, num: this.playerNum };
+				return returnObj;
 			}
 			else
 				return false;
@@ -101,42 +102,46 @@ Player.prototype.act = function(cardIndexes){
 
 	if(game.state == 2){ //everyone else has passed
 		if(game.isSingle(cardsToPlay) || game.isPair(cardsToPlay) || game.isFiveCardPlay(cardsToPlay)){
-			game.putCardsInCenter(this, cardsToPlay);
-			removeByIndexes(this.hand, cardIndexes);
-			game.playersPassed = 0;
-			return true;
+			endTurn(this, cardsToPlay, cardIndexes);
+				var returnObj = { cards: cardsToPlay, num: this.playerNum };
+				return returnObj;
 		}
 		else
 			return false;
 	}
 
 	if(game.isSingle(cardsToPlay) && game.validSingleCardPlay(game.center, cardsToPlay)){
-		game.putCardsInCenter(this, cardsToPlay);
-		removeByIndexes(this.hand, cardIndexes);
-		game.playersPassed = 0;
-		return true;
+		endTurn(this, cardsToPlay, cardIndexes);
+				var returnObj = { cards: cardsToPlay, num: this.playerNum };
+				return returnObj;
 	}
 	if(game.isPair(cardsToPlay) && game.validPairPlay(game.center, cardsToPlay)){
-		game.putCardsInCenter(this, cardsToPlay);
-		removeByIndexes(this.hand, cardIndexes);
-		game.playersPassed = 0;
-		return true;
+		endTurn(this, cardsToPlay, cardIndexes);
+				var returnObj = { cards: cardsToPlay, num: this.playerNum };
+				return returnObj;
 	}
 	if(cardsToPlay.length == 5){
 		if(validFiveCardPlay(game.center, cardsToPlay)){
-			game.putCardsInCenter(this, cardsToPlay);
-			removeByIndexes(this.hand, cardIndexes);
-			game.playersPassed = 0;
-			return true;
+			endTurn(this, cardsToPlay, cardIndexes);
+				var returnObj = { cards: cardsToPlay, num: this.playerNum };
+				return returnObj;
 		}
 	}
 	return false;
 
 }
 
+function endTurn(that, cardsToPlay, cardIndexes){
+	game.putCardsInCenter(that, cardsToPlay);
+	removeByIndexes(that.hand, cardIndexes);
+	game.playersPassed = 0;
+	that.lastPlayed = cardsToPlay;
+	console.log(that);
+}
+
 function Game(){
 	this.deck = new Deck();
-	this.players = [new Player(), new Player(), new Player(), new Player()];
+	this.players = [new Player(0), new Player(1), new Player(2), new Player(3)];
 	this.center = [];
 	this.centerHistory = [];
 	this.playersPassed = 0;
