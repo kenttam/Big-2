@@ -59,6 +59,18 @@
       }
     }
 
+    Deck.prototype.shuffle = function() {
+      var randomNum, result;
+      result = [];
+      this.cards = this.cards || [];
+      while (this.cards.length > 0) {
+        randomNum = Math.floor(Math.random() * this.cards.length);
+        result.push(this.cards[randomNum]);
+        this.cards.splice(this.cards, randomNum);
+      }
+      return this.cards = result;
+    };
+
     return Deck;
 
   })();

@@ -36,6 +36,14 @@ class Deck
     for own rank_num, rank of Ranks
       for own suit_num, suit of Suits
         @cards.push(new Card(rank, suit))
+  shuffle: ->
+    result = []
+    @cards = @cards || []
+    while @cards.length > 0
+      randomNum = Math.floor(Math.random() * @cards.length)
+      result.push @cards[randomNum]
+      @cards.splice @cards, randomNum
+    @cards = result
 
 class Player
   constructor: ->

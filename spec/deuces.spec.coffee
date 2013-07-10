@@ -7,12 +7,17 @@ describe "The module", ->
 game = new deuces.Game()
 
 describe "The Deck", ->
-	it "is not null", ->
-		expect(typeof(game.deck)).not.toBe 'undefined'
+  it "is not null", ->
+    expect(typeof(game.deck)).not.toBe 'undefined'
 
-	it "has 52 cards", ->
-		expect(game.deck.cards.length).toBe 52
- 
+  it "has 52 cards", ->
+    expect(game.deck.cards.length).toBe 52
+
+  it "can be shuffled", ->
+    oldDeck = _.clone(game.deck)
+    game.deck.shuffle()
+    expect(_.isEqual(game.deck.cards, oldDeck.cards)).toBe false
+
 describe "The Player", ->
   it "is not null", ->
     expect(deuces.Player?).toBe true
