@@ -25,14 +25,20 @@ class Game
   constructor: ->
     @deck = new Deck()
     @players = []
+    @rulesEngine = new RulesEngine()
+    @playersPassed = 0
+    @cardsInCenter = []
     
   addPlayer: (player) ->
     if player instanceof Player and @players.length < 4
       @players.push player
+      player.game = this
   
   start: ->
     if @players.length == 4
       @deck.shuffle()
+      @passOutCards()
+      @whoseTurn = @findPlayerIndexWithDiamondThree()
      
   passOutCards: ->
     @players[0].hand = @deck.cards[0...13]
@@ -50,7 +56,27 @@ class Game
       )
     )
     return playerNumber
+
+  processTurn: (id, cards) ->
+    if @players[@whoseTurn].id == id
+      result = @rulesEngine.checkIfMoveIsValid(cards)
     
+class RulesEngine
+  constructor: ()->
+    
+  checkIfMoveIsValid: (cards) ->
+    ###
+    if @playersPassed == 3 || @cardsInCenter.length == 0
+      
+    else
+    ### 
+  isSingle: (cards) ->
+    return cards.length == 1
+   
+  isPair: (cards) ->
+    return cards.length == 2 && cards[0].rank == cards[1].rank
+
+  
     
 class Deck
   constructor: ->
@@ -64,6 +90,10 @@ class Deck
 class Player
   constructor: ->
     @hand = []
+    @game = null
+    @id = Math.floor(Math.random()*10000000) #using a random number for now until i can set up database and generate ids
+  playCards: (cards)->
+    game.processTurn(@id, cards)
     
 class Card
   constructor: (rank, suit)->
@@ -74,3 +104,4 @@ exports.Card = Card
 exports.Game = Game
 exports.Player = Player
 exports.Deck = Deck
+exports.RulesEngine = RulesEngine

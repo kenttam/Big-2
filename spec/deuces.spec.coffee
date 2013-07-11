@@ -35,6 +35,7 @@ describe "The Game", ->
     player = new deuces.Player()
     game.addPlayer player
     expect(game.players.length).toBe 1
+    expect(player.game).toBe game
   it "should not add more than 4 players", ->
     player2 = new deuces.Player()
     player3 = new deuces.Player()
@@ -63,3 +64,21 @@ describe "The Game", ->
     game.players[3].hand = [new deuces.Card(3, "Diamond")]
     index = game.findPlayerIndexWithDiamondThree()
     expect(index).toBe 3
+
+describe "The Rules Engine", ->
+  rulesEngine = new deuces.RulesEngine()
+  it "is not null", ->
+    expect(deuces.RulesEngine?).toBe true
+  it "can tell if a hand is a single", ->
+    hand = [new deuces.Card(3, "Diamond")]
+    expect(rulesEngine.isSingle(hand)).toBe true
+    hand.push new deuces.Card(4, "Diamond")
+    expect(rulesEngine.isSingle(hand)).toBe false
+  it "can tell if a hand is a pair", ->
+    hand = [new deuces.Card(3, "Diamond")]
+    expect(rulesEngine.isPair(hand)).toBe false
+    hand.push new deuces.Card(4, "Diamond")
+    expect(rulesEngine.isPair(hand)).toBe false
+    hand[1] = new deuces.Card(3, "Spade")
+    expect(rulesEngine.isPair(hand)).toBe true
+    
