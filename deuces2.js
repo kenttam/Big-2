@@ -40,6 +40,33 @@
       }
     };
 
+    Game.prototype.start = function() {
+      if (this.players.length === 4) {
+        return this.deck.shuffle();
+      }
+    };
+
+    Game.prototype.passOutCards = function() {
+      this.players[0].hand = this.deck.cards.slice(0, 13);
+      this.players[1].hand = this.deck.cards.slice(13, 26);
+      this.players[2].hand = this.deck.cards.slice(26, 39);
+      return this.players[3].hand = this.deck.cards.slice(39, 52);
+    };
+
+    Game.prototype.findPlayerIndexWithDiamondThree = function() {
+      var diamondThree, playerNumber;
+      diamondThree = new Card(3, "Diamond");
+      playerNumber = null;
+      _.each(this.players, function(player, currentPlayerNumber) {
+        return _.each(player.hand, function(card) {
+          if (_.isEqual(card, diamondThree)) {
+            return playerNumber = currentPlayerNumber;
+          }
+        });
+      });
+      return playerNumber;
+    };
+
     return Game;
 
   })();
@@ -60,15 +87,7 @@
     }
 
     Deck.prototype.shuffle = function() {
-      var randomNum, result;
-      result = [];
-      this.cards = this.cards || [];
-      while (this.cards.length > 0) {
-        randomNum = Math.floor(Math.random() * this.cards.length);
-        result.push(this.cards[randomNum]);
-        this.cards.splice(this.cards, randomNum);
-      }
-      return this.cards = result;
+      return this.cards = _.shuffle(this.cards);
     };
 
     return Deck;
@@ -76,7 +95,9 @@
   })();
 
   Player = (function() {
-    function Player() {}
+    function Player() {
+      this.hand = [];
+    }
 
     return Player;
 
@@ -97,5 +118,7 @@
   exports.Game = Game;
 
   exports.Player = Player;
+
+  exports.Deck = Deck;
 
 }).call(this);

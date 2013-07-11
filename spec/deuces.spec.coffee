@@ -1,4 +1,5 @@
 deuces = require "../deuces2"
+_ = require "../lib/underscore-min"
 
 describe "The module", ->
 	it "is not null", ->
@@ -14,9 +15,9 @@ describe "The Deck", ->
     expect(game.deck.cards.length).toBe 52
 
   it "can be shuffled", ->
-    oldDeck = _.clone(game.deck)
+    newDeck = new deuces.Deck()
     game.deck.shuffle()
-    expect(_.isEqual(game.deck.cards, oldDeck.cards)).toBe false
+    expect(_.isEqual(game.deck.cards, newDeck.cards)).toBe false
 
 describe "The Player", ->
   it "is not null", ->
@@ -46,6 +47,19 @@ describe "The Game", ->
     game.addPlayer player5
     expect(game.players.length).toBe 4
   it "should not add something that's not a player", ->
-    game = new deuces.Game()
-    game.addPlayer 1
-    expect(game.players.length).toBe 0
+    game2 = new deuces.Game()
+    game2.addPlayer 1
+    expect(game2.players.length).toBe 0
+  it "can pass out cards to players", ->
+    game.passOutCards()
+    expect(game.players[0].hand.length).toBe 13
+    expect(game.players[1].hand.length).toBe 13
+    expect(game.players[2].hand.length).toBe 13
+    expect(game.players[3].hand.length).toBe 13
+  it "can find the player with Diamond Three", ->
+    game.players[0].hand = []
+    game.players[1].hand = []
+    game.players[2].hand = []
+    game.players[3].hand = [new deuces.Card(3, "Diamond")]
+    index = game.findPlayerIndexWithDiamondThree()
+    expect(index).toBe 3

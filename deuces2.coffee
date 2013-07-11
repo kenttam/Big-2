@@ -30,6 +30,28 @@ class Game
     if player instanceof Player and @players.length < 4
       @players.push player
   
+  start: ->
+    if @players.length == 4
+      @deck.shuffle()
+     
+  passOutCards: ->
+    @players[0].hand = @deck.cards[0...13]
+    @players[1].hand = @deck.cards[13...26]
+    @players[2].hand = @deck.cards[26...39]
+    @players[3].hand = @deck.cards[39...52]
+    
+  findPlayerIndexWithDiamondThree: ->
+    diamondThree = new Card(3, "Diamond")
+    playerNumber = null
+    _.each(@players, (player, currentPlayerNumber) ->
+      _.each(player.hand, (card) ->
+        if _.isEqual(card, diamondThree)
+          playerNumber = currentPlayerNumber
+      )
+    )
+    return playerNumber
+    
+    
 class Deck
   constructor: ->
     @cards = []
@@ -37,17 +59,12 @@ class Deck
       for own suit_num, suit of Suits
         @cards.push(new Card(rank, suit))
   shuffle: ->
-    result = []
-    @cards = @cards || []
-    while @cards.length > 0
-      randomNum = Math.floor(Math.random() * @cards.length)
-      result.push @cards[randomNum]
-      @cards.splice @cards, randomNum
-    @cards = result
+    @cards = _.shuffle(@cards)
 
 class Player
   constructor: ->
-
+    @hand = []
+    
 class Card
   constructor: (rank, suit)->
     @rank = rank
@@ -56,3 +73,4 @@ class Card
 exports.Card = Card
 exports.Game = Game
 exports.Player = Player
+exports.Deck = Deck
