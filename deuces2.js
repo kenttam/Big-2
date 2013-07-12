@@ -5,6 +5,8 @@
 
   _ = require("./lib/underscore-min");
 
+  Card = require("./card");
+
   Ranks = {
     0: 3,
     1: 4,
@@ -104,6 +106,19 @@
       return cards.length === 2 && cards[0].rank === cards[1].rank;
     };
 
+    RulesEngine.prototype.isStraight = function(cards) {
+      var sortedCards, x, _i;
+      sortedCards = _.sortBy(cards, function(card) {
+        return card.numericalRank();
+      });
+      for (x = _i = 0; _i < 4; x = ++_i) {
+        if (sortedCards[x].numericalRank() + 1 !== sortedCards[x + 1].numericalRank()) {
+          return false;
+        }
+      }
+      return true;
+    };
+
     return RulesEngine;
 
   })();
@@ -140,23 +155,21 @@
 
     Player.prototype.playCards = function(cards) {
       return game.processTurn(this.id, cards);
+      /*    
+      class Card
+        constructor: (rank, suit)->
+      @rank = rank
+      @suits = suit
+        numericalRank: ->
+      numericalRankDictionary = _.invert Ranks
+      parseInt(numericalRankDictionary[@rank], 10)
+      */
+
     };
 
     return Player;
 
   })();
-
-  Card = (function() {
-    function Card(rank, suit) {
-      this.rank = rank;
-      this.suits = suit;
-    }
-
-    return Card;
-
-  })();
-
-  exports.Card = Card;
 
   exports.Game = Game;
 

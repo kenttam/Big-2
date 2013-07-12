@@ -1,5 +1,7 @@
 _ = require "./lib/underscore-min"
 
+Card = require "./card"
+
 Ranks =
   0 : 3
   1 : 4
@@ -101,7 +103,7 @@ class Player
     @id = Math.floor(Math.random()*10000000) #using a random number for now until i can set up database and generate ids
   playCards: (cards)->
     game.processTurn(@id, cards)
-    
+    ###    
 class Card
   constructor: (rank, suit)->
     @rank = rank
@@ -109,8 +111,8 @@ class Card
   numericalRank: ->
     numericalRankDictionary = _.invert Ranks
     parseInt(numericalRankDictionary[@rank], 10)
+    ###
  
-exports.Card = Card
 exports.Game = Game
 exports.Player = Player
 exports.Deck = Deck
