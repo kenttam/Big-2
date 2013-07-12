@@ -1,5 +1,6 @@
 deuces = require "../deuces2"
 Card = require "../card"
+Deck = require "../deck"
 _ = require "../lib/underscore-min"
 
 describe "The module", ->
@@ -16,7 +17,7 @@ describe "The Deck", ->
     expect(game.deck.cards.length).toBe 52
 
   it "can be shuffled", ->
-    newDeck = new deuces.Deck()
+    newDeck = new Deck()
     game.deck.shuffle()
     expect(_.isEqual(game.deck.cards, newDeck.cards)).toBe false
 
@@ -27,7 +28,6 @@ describe "The Player", ->
 describe "The Card", ->
   it "can return numerical rank", ->
     card = new Card("3", "Diamond")
-    console.log card
     expect(card.numericalRank()).toBe 0
 
 describe "The Game", ->

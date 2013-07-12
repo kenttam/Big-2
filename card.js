@@ -15,7 +15,6 @@
     Card.prototype.numericalRank = function() {
       var numericalRankDictionary;
       numericalRankDictionary = _.invert(Ranks);
-      console.log(numericalRankDictionary);
       return parseInt(numericalRankDictionary[this.rank], 10);
     };
 

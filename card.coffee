@@ -7,7 +7,6 @@ class Card
     @suits = suit
   numericalRank: ->
     numericalRankDictionary = _.invert Ranks
-    console.log(numericalRankDictionary)
     parseInt(numericalRankDictionary[@rank], 10)
 
 module.exports = Card
