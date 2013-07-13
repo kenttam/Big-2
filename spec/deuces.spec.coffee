@@ -1,6 +1,7 @@
 deuces = require "../deuces2"
 Card = require "../card"
 Deck = require "../deck"
+Player = require "../player"
 _ = require "../lib/underscore-min"
 
 describe "The module", ->
@@ -23,7 +24,7 @@ describe "The Deck", ->
 
 describe "The Player", ->
   it "is not null", ->
-    expect(deuces.Player?).toBe true
+    expect(Player?).toBe true
 
 describe "The Card", ->
   it "can return numerical rank", ->
@@ -39,19 +40,19 @@ describe "The Game", ->
   it "has players", ->
     expect(game.players?).toBe true
   it "can add players", ->
-    player = new deuces.Player()
+    player = new Player()
     game.addPlayer player
     expect(game.players.length).toBe 1
     expect(player.game).toBe game
   it "should not add more than 4 players", ->
-    player2 = new deuces.Player()
-    player3 = new deuces.Player()
-    player4 = new deuces.Player()
+    player2 = new Player()
+    player3 = new Player()
+    player4 = new Player()
     game.addPlayer player2
     game.addPlayer player3
     game.addPlayer player4
     expect(game.players.length).toBe 4
-    player5 = new deuces.Player()
+    player5 = new Player()
     game.addPlayer player5
     expect(game.players.length).toBe 4
   it "should not add something that's not a player", ->
