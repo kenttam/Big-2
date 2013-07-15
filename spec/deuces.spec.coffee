@@ -2,6 +2,7 @@ deuces = require "../deuces2"
 Card = require "../card"
 Deck = require "../deck"
 Player = require "../player"
+RulesEngine = require "../rulesEngine"
 _ = require "../lib/underscore-min"
 
 describe "The module", ->
@@ -74,9 +75,9 @@ describe "The Game", ->
     expect(index).toBe 3
 
 describe "The Rules Engine", ->
-  rulesEngine = new deuces.RulesEngine()
+  rulesEngine = new RulesEngine()
   it "is not null", ->
-    expect(deuces.RulesEngine?).toBe true
+    expect(RulesEngine?).toBe true
   it "can tell if a hand is a single", ->
     hand = [new Card(3, "Diamond")]
     expect(rulesEngine.isSingle(hand)).toBe true
