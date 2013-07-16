@@ -24,5 +24,10 @@ class RulesEngine
         return false
 
     return true
+  isFlush: (cards) ->
+    if(cards[0].suit == cards[1].suit == cards[2].suit == cards[3].suit == cards[4].suit)
+      return true
+    else
+      return false
 
 module.exports = RulesEngine

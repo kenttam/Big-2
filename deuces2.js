@@ -70,6 +70,4 @@
 
   exports.Game = Game;
 
-  exports.RulesEngine = RulesEngine;
-
 }).call(this);

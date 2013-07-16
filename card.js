@@ -9,7 +9,7 @@
   Card = (function() {
     function Card(rank, suit) {
       this.rank = rank;
-      this.suits = suit;
+      this.suit = suit;
     }
 
     Card.prototype.numericalRank = function() {

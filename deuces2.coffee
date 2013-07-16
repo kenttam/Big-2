@@ -47,4 +47,3 @@ class Game
 
  
 exports.Game = Game
-exports.RulesEngine = RulesEngine

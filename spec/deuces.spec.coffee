@@ -95,3 +95,8 @@ describe "The Rules Engine", ->
     expect(rulesEngine.isStraight hand).toBe true
     hand[4] = new Card(5, "Spade")
     expect(rulesEngine.isStraight hand).toBe false
+  it "can tell if a hand is a flush", ->
+    hand = [new Card(10, "Diamond"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+    expect(rulesEngine.isFlush hand).toBe true
+    hand[0] = new Card(10, "Spade")
+    expect(rulesEngine.isFlush hand).toBe false
