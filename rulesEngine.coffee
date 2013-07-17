@@ -37,6 +37,13 @@ class RulesEngine
     if @isStraightFlush cardsInCenter
       if @isStraightFlush cards
         return @compareStraightFlush cards, cardsInCenter
+      else
+        return false
+    else if @isFourOfAKind cardsInCenter
+      if @isStraightFlush cards
+        return true
+      else if @isFourOfAKind cards
+        return @compareFourOfAKind cards, cardsInCenter
 
   compareStraightFlush: (cards, center) ->
     sortedCards = @sortByNumericalRank cards
@@ -50,6 +57,37 @@ class RulesEngine
         return false
     else
       return false
+
+  compareFourOfAKind: (cards, center) ->
+    return @getFourOfAKindRank(cards) > @getFourOfAKindRank(center)
+  
+  getFourOfAKindRank: (cards) ->
+    if (cards[0].rank == cards[1].rank)
+      return cards[0].numericalRank()
+    else if cards[0] == cards[2].rank
+      return cards[0].numericalRank()
+    else
+      return cards[1].numericalRank()
+
+  compareFullHouse: (cards, center) ->
+    return @getFullHouseRank(cards) > @getFullHouseRank(center)
+ 
+  compareFlush: (cards, center) ->
+    if (cards[0].suitRank() > center[0].suitRank())
+      return true
+    else if (cards[0].suitRank() == center[0].suitRank())
+      sortedCards = @sortByNumericalRank cards
+      sortedCenter = @sortByNumericalRank center
+      return sortedCards[4].numericalRank() > sortedCenter[4].numericalRank()
+    else
+      return false
+  
+  getFullHouseRank: (cards) ->
+    sortedCards = @sortByNumericalRank cards
+    if (sortedCards[0].rank == sortedCards[1].rank == sortedCards[2])
+      return sortedCards[0].numericalRank()
+    else
+      return sortedCards[4].numericalRank()
      
   validHand: (cards) ->
     @isSingle cards or @isPair cards or @validFiveCardMove cards

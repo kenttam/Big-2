@@ -75,4 +75,29 @@ describe "The Rules Engine", ->
       expect(rulesEngine.compareStraightFlush hand, center).toBe false
       hand[0] = new Card(8, "Diamond")
       expect(rulesEngine.compareStraightFlush hand, center).toBe true
+    it "can tell the rank of a four of a kind", ->
+      hand = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(3, "Club"), new Card(7, "Diamond")]
+      expect(rulesEngine.getFourOfAKindRank hand).toBe 0
+    it "can compare four of a kind", ->
+      hand = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(3, "Club"), new Card(7, "Diamond")]
+      center = [new Card(4, "Diamond"), new Card(4, "Heart"), new Card(4, "Spade"), new Card(4, "Club"), new Card(7, "Diamond")]
+      expect(rulesEngine.compareFourOfAKind hand, center).toBe false
+    it "can compare full house", ->
+      hand = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(7, "Club"), new Card(7, "Diamond")]
+      center = [new Card(4, "Diamond"), new Card(4, "Heart"), new Card(4, "Spade"), new Card(7, "Club"), new Card(7, "Diamond")]
+      expect(rulesEngine.compareFullHouse hand, center).toBe false
+    it "can compare flushes", ->
+      hand = [new Card(9, "Diamond"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+      center = [new Card(8, "Spade"), new Card(4, "Spade"), new Card(5, "Spade"), new Card(6, "Spade"), new Card(7, "Spade")]
+      expect(rulesEngine.compareFlush hand, center).toBe false
+      center  = [new Card(8, "Diamond"), new Card(10, "Diamond"), new Card("J", "Diamond"), new Card("Q", "Diamond"), new Card(2, "Diamond")]
+      expect(rulesEngine.compareFlush center, hand).toBe true
+    it "can compare straights", ->
+      hand = [new Card(8, "Spade"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+      center = [new Card(8, "Diamond"), new Card(4, "Spade"), new Card(5, "Spade"), new Card(6, "Spade"), new Card(7, "Spade")]
+      expect(rulesEngine.compareFlush hand, center).toBe true
+      center = [new Card(3, "Diamond"), new Card(4, "Spade"), new Card(5, "Spade"), new Card(6, "Spade"), new Card(7, "Spade")]
+      expect(rulesEngine.compareFlush hand, center).toBe true
+      
+      
 
