@@ -2,7 +2,3 @@ The game Big-2 written in Object Oriented JavaScript
 
 Rules of the game: http://en.wikipedia.org/wiki/Big_2
 
-Variation (this is just based on how I played the game as a kid as opposed to the rules posted on wikipedia)
--Straights: K-A-2-3-4, Q-K-A-2-3, J-Q-K-A-2 are not valid hands. Rank goes by highest card.
--No Dragons
--No Reshuffling
