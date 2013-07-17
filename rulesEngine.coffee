@@ -29,5 +29,14 @@ class RulesEngine
       return true
     else
       return false
+  isFullHouse: (cards) ->
+    sortedCards = _.sortBy(cards, (card)->
+      card.numericalRank()
+    )
+    if(sortedCards[0].numericalRank() == sortedCards[1].numericalRank() == sortedCards[2].numericalRank() && sortedCards[3].numericalRank() == sortedCards[4].numericalRank())
+      return true
+    if(sortedCards[0].numericalRank() == sortedCards[1].numericalRank() && sortedCards[2].numericalRank() == sortedCards[3].numericalRank() == sortedCards[4].numericalRank())
+      return true
+    return false
 
 module.exports = RulesEngine
