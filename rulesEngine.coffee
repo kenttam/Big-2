@@ -35,15 +35,40 @@ class RulesEngine
 
   validFiveCardsPlay: (cards, cardsInCenter) ->
     if @isStraightFlush cardsInCenter
-      if @isStraightFlush cards
+      if @isStraightFlush(cards)
         return @compareStraightFlush cards, cardsInCenter
       else
         return false
     else if @isFourOfAKind cardsInCenter
-      if @isStraightFlush cards
+      if @isStraightFlush(cards)
         return true
       else if @isFourOfAKind cards
         return @compareFourOfAKind cards, cardsInCenter
+      else
+        return false
+    else if @isFullHouse cardsInCenter
+      if @isStraightFlush(cards) || @isFourOfAKind(cards)
+        return true
+      else if @isFullHouse cards
+        return @compareFullHouse cards, cardsInCenter
+      else
+        return false
+    else if @isFlush cardsInCenter
+      if @isStraightFlush(cards) || @isFourOfAKind(cards) || @isFullHouse(cards)
+        return true
+      else if @isFlush cards
+        return @compareFlush cards, cardsInCenter
+      else
+        return false
+    else if @isStraight cardsInCenter
+      if @isStraightFlush(cards) || @isFourOfAKind(cards) || @isFullHouse(cards) || @isFlush(cards)
+        return true
+      else if @isStraight cards
+        return @compareStraight cards, cardsInCenter
+      else
+        return false
+    else
+      return false
 
   compareStraightFlush: (cards, center) ->
     sortedCards = @sortByNumericalRank cards
@@ -79,6 +104,16 @@ class RulesEngine
       sortedCards = @sortByNumericalRank cards
       sortedCenter = @sortByNumericalRank center
       return sortedCards[4].numericalRank() > sortedCenter[4].numericalRank()
+    else
+      return false
+
+  compareStraight: (cards, center) ->
+    sortedCards = @sortByNumericalRank cards
+    sortedCenter = @sortByNumericalRank center
+    if sortedCards[4].numericalRank() > sortedCenter[4].numericalRank()
+      return true
+    else if sortedCards[4].numericalRank() == sortedCenter[4].numericalRank()
+      return sortedCards[4].suitRank() > sortedCenter[4].suitRank()
     else
       return false
   

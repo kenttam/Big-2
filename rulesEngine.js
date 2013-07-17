@@ -58,7 +58,35 @@
           return true;
         } else if (this.isFourOfAKind(cards)) {
           return this.compareFourOfAKind(cards, cardsInCenter);
+        } else {
+          return false;
         }
+      } else if (this.isFullHouse(cardsInCenter)) {
+        if (this.isStraightFlush(cards) || this.isFourOfAKind(cards)) {
+          return true;
+        } else if (this.isFullHouse(cards)) {
+          return this.compareFullHouse(cards, cardsInCenter);
+        } else {
+          return false;
+        }
+      } else if (this.isFlush(cardsInCenter)) {
+        if (this.isStraightFlush(cards) || this.isFourOfAKind(cards) || this.isFullHouse(cards)) {
+          return true;
+        } else if (this.isFlush(cards)) {
+          return this.compareFlush(cards, cardsInCenter);
+        } else {
+          return false;
+        }
+      } else if (this.isStraight(cardsInCenter)) {
+        if (this.isStraightFlush(cards) || this.isFourOfAKind(cards) || this.isFullHouse(cards) || this.isFlush(cards)) {
+          return true;
+        } else if (this.isStraight(cards)) {
+          return this.compareStraight(cards, cardsInCenter);
+        } else {
+          return false;
+        }
+      } else {
+        return false;
       }
     };
 
@@ -105,6 +133,19 @@
         sortedCards = this.sortByNumericalRank(cards);
         sortedCenter = this.sortByNumericalRank(center);
         return sortedCards[4].numericalRank() > sortedCenter[4].numericalRank();
+      } else {
+        return false;
+      }
+    };
+
+    RulesEngine.prototype.compareStraight = function(cards, center) {
+      var sortedCards, sortedCenter;
+      sortedCards = this.sortByNumericalRank(cards);
+      sortedCenter = this.sortByNumericalRank(center);
+      if (sortedCards[4].numericalRank() > sortedCenter[4].numericalRank()) {
+        return true;
+      } else if (sortedCards[4].numericalRank() === sortedCenter[4].numericalRank()) {
+        return sortedCards[4].suitRank() > sortedCenter[4].suitRank();
       } else {
         return false;
       }

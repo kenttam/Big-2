@@ -98,6 +98,15 @@ describe "The Rules Engine", ->
       expect(rulesEngine.compareFlush hand, center).toBe true
       center = [new Card(3, "Diamond"), new Card(4, "Spade"), new Card(5, "Spade"), new Card(6, "Spade"), new Card(7, "Spade")]
       expect(rulesEngine.compareFlush hand, center).toBe true
+    it "can validate five card plays", ->
+      straightFlush = [new Card(3, "Diamond"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+      fourOfAKind = [new Card(3, "Club"),new Card(2, "Diamond"), new Card(3, "Diamond"), new Card(3, "Spade"), new Card(3, "Heart")]
+      fullHouse = [new Card(2, "Diamond"), new Card(2, "Spade"), new Card(3, "Diamond"), new Card(3, "Spade"), new Card(3, "Heart")]
+      flush = [new Card(10, "Diamond"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+      straight = [new Card(3, "Diamond"), new Card(4, "Hearts"), new Card(5, "Club"), new Card(6, "Spade"), new Card(7, "Diamond")]
+      expect(rulesEngine.validFiveCardsPlay straightFlush, fourOfAKind).toBe true
+      expect(rulesEngine.validFiveCardsPlay fourOfAKind, fullHouse).toBe true
+      expect(rulesEngine.validFiveCardsPlay fullHouse, flush).toBe true
+      expect(rulesEngine.validFiveCardsPlay flush, straight).toBe true
+      expect(rulesEngine.validFiveCardsPlay straightFlush, flush).toBe true
       
-      
-
