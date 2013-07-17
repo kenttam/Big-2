@@ -32,4 +32,13 @@ describe "The Rules Engine", ->
     expect(rulesEngine.isFullHouse hand).toBe true
     hand[4] = new Card(4, "Heart")
     expect(rulesEngine.isFullHouse hand).toBe false
-
+  it "can tell if a hand is a four of a kind", ->
+    hand = [new Card(3, "Club"),new Card(2, "Diamond"), new Card(3, "Diamond"), new Card(3, "Spade"), new Card(3, "Heart")]
+    expect(rulesEngine.isFourOfAKind hand).toBe true
+    hand = [new Card(2, "Club"),new Card(2, "Diamond"), new Card(3, "Diamond"), new Card(3, "Spade"), new Card(3, "Heart")]
+    expect(rulesEngine.isFourOfAKind hand).toBe false
+  it "can tell if a hand is a straight flush", ->
+    hand = [new Card(3, "Diamond"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+    expect(rulesEngine.isStraightFlush hand).toBe true
+    hand = [new Card(3, "Spade"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+    expect(rulesEngine.isStraightFlush hand).toBe false

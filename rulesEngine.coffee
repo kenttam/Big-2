@@ -16,9 +16,7 @@ class RulesEngine
     return cards.length == 2 && cards[0].rank == cards[1].rank
 
   isStraight: (cards) ->
-    sortedCards = _.sortBy(cards, (card)->
-      card.numericalRank()
-    )
+    sortedCards = @sortByNumericalRank(cards)
     for x in [0...4]
       unless sortedCards[x].numericalRank() + 1 is sortedCards[x+1].numericalRank()
         return false
@@ -30,13 +28,25 @@ class RulesEngine
     else
       return false
   isFullHouse: (cards) ->
-    sortedCards = _.sortBy(cards, (card)->
-      card.numericalRank()
-    )
+    sortedCards = @sortByNumericalRank(cards)
     if(sortedCards[0].numericalRank() == sortedCards[1].numericalRank() == sortedCards[2].numericalRank() && sortedCards[3].numericalRank() == sortedCards[4].numericalRank())
       return true
     if(sortedCards[0].numericalRank() == sortedCards[1].numericalRank() && sortedCards[2].numericalRank() == sortedCards[3].numericalRank() == sortedCards[4].numericalRank())
       return true
     return false
+  isFourOfAKind: (cards) ->
+    sortedCards = @sortByNumericalRank(cards)
+    if(sortedCards[0].numericalRank() == sortedCards[1].numericalRank() == sortedCards[2].numericalRank() == sortedCards[3].numericalRank() || sortedCards[1].numericalRank() == sortedCards[1].numericalRank() == sortedCards[2].numericalRank() == sortedCards[3].numericalRank())
+      return true
+    else
+      return false
+  isStraightFlush: (cards) ->
+    @isStraight(cards) && @isFlush(cards)
+
+  sortByNumericalRank: (cards) ->
+    _.sortBy(cards, (card)->
+      card.numericalRank()
+    )
+
 
 module.exports = RulesEngine
