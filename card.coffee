@@ -1,4 +1,5 @@
 Ranks = require "./ranks"
+Suits = require "./suits"
 _ = require "./lib/underscore-min"
 
 class Card
@@ -8,5 +9,9 @@ class Card
   numericalRank: ->
     numericalRankDictionary = _.invert Ranks
     parseInt(numericalRankDictionary[@rank], 10)
+  suitRank: ->
+    suitRankDictionary = _.invert Suits
+    parseInt(suitRankDictionary[@suit], 10)
+
 
 module.exports = Card

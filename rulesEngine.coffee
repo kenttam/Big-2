@@ -3,12 +3,60 @@ _ = require "./lib/underscore-min"
 class RulesEngine
   constructor: ()->
     
-  checkIfMoveIsValid: (cards) ->
-    ###
-    if @playersPassed == 3 || @cardsInCenter.length == 0
+  checkIfMoveIsValid: (cards, cardsInCenter) ->
+    if cardsInCenter.length == 0
+      return @validMove cards
+    else if @isSingle cardsInCenter
+      if @isSingle cards
+        return @validSingleMove cards, cardsInCenter
+      else
+        return false
+    else if @isPair cardsInCenter
+      if @isPair cards
+        return validPairPlay cards, cardsInCenter
       
+  validSinglePlay: (cards, cardsInCenter) ->
+    if cards[0].numericalRank() > cardsInCenter[0].numericalRank()
+      return true
+    else if cards[0].numericalRank() == cardsInCenter[0].numericalRank()
+      return cards[0].suitRank() > cardsInCenter[0].suitRank()
     else
-    ###
+      return false
+  
+  validPairPlay: (cards, cardsInCenter) ->
+    if cards[0].numericalRank() > cardsInCenter[0].numericalRank()
+      return true
+    else if cards[0].numericalRank() == cardsInCenter[0].numericalRank()
+      sortedCards = @sortBySuitRank(cards)
+      sortedCenter = @sortBySuitRank(cardsInCenter)
+      return sortedCards[1].suitRank() > sortedCenter[1].suitRank()
+    else
+      return false
+
+  validFiveCardsPlay: (cards, cardsInCenter) ->
+    if @isStraightFlush cardsInCenter
+      if @isStraightFlush cards
+        return @compareStraightFlush cards, cardsInCenter
+
+  compareStraightFlush: (cards, center) ->
+    sortedCards = @sortByNumericalRank cards
+    sortedCenter = @sortBySuitRank center
+    if (sortedCards[4].numericalRank() > sortedCenter[4].numericalRank())
+      return true
+    else if (sortedCards[4].numericalRank() == sortedCenter[4].numericalRank())
+      if sortedCards[4].suitRank() > sortedCenter[4].suitRank()
+        return true
+      else
+        return false
+    else
+      return false
+     
+  validHand: (cards) ->
+    @isSingle cards or @isPair cards or @validFiveCardMove cards
+
+  validFiveCardHand: (cards) ->
+    @isStraight cards or @isFlush cards or @isFullHouse cards or @isFourOfAKind
+
   isSingle: (cards) ->
     return cards.length == 1
    
@@ -46,6 +94,10 @@ class RulesEngine
   sortByNumericalRank: (cards) ->
     _.sortBy(cards, (card)->
       card.numericalRank()
+    )
+  sortBySuitRank: (cards) ->
+    _.sortBy(cards, (card)->
+      card.suitRank()
     )
 
 

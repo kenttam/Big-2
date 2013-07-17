@@ -42,3 +42,37 @@ describe "The Rules Engine", ->
     expect(rulesEngine.isStraightFlush hand).toBe true
     hand = [new Card(3, "Spade"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
     expect(rulesEngine.isStraightFlush hand).toBe false
+  it "can sort cards by Suits", ->
+    hand = [new Card(3, "Heart"), new Card(3, "Spade"), new Card(3, "Diamond"), new Card(3 , "Club")]
+    sortedHand = rulesEngine.sortBySuitRank(hand)
+    expect(sortedHand[0].suit).toBe "Diamond"
+    expect(sortedHand[1].suit).toBe "Club"
+    expect(sortedHand[2].suit).toBe "Heart"
+    expect(sortedHand[3].suit).toBe "Spade"
+  it "can sort cards by Rank", ->
+    hand = [new Card(2, "Heart"), new Card("A", "Spade"), new Card("K", "Diamond"), new Card(3 , "Club")]
+    sortedHand = rulesEngine.sortByNumericalRank(hand)
+    expect(sortedHand[0].rank).toBe 3
+    expect(sortedHand[1].rank).toBe "K"
+  describe "comparisons", ->
+    it "can tell if a single is better than the one in center", ->
+      hand = [new Card(3, "Spade")]
+      center = [new Card(4, "Diamond")]
+      expect(rulesEngine.validSinglePlay hand, center).toBe false
+      hand = [new Card(4, "Spade")]
+      expect(rulesEngine.validSinglePlay hand, center).toBe true
+    it "can tell if a pair is better than the one in center", ->
+      hand = [new Card(3, "Spade"), new Card(3, "Diamond")]
+      center = [new Card(4, "Spade"), new Card(4, "Diamond")]
+      expect(rulesEngine.validPairPlay hand, center).toBe false
+      expect(rulesEngine.validPairPlay center, hand).toBe true
+      center = [new Card(3, "Hearts"), new Card(3, "Club")]
+      expect(rulesEngine.validPairPlay hand, center).toBe true
+  describe "five cards plays", ->
+    it "can tell if one straight flush is better than another", ->
+      hand = [new Card(3, "Diamond"), new Card(4, "Diamond"), new Card(5, "Diamond"), new Card(6, "Diamond"), new Card(7, "Diamond")]
+      center = [new Card(3, "Spade"), new Card(4, "Spade"), new Card(5, "Spade"), new Card(6, "Spade"), new Card(7, "Spade")]
+      expect(rulesEngine.compareStraightFlush hand, center).toBe false
+      hand[0] = new Card(8, "Diamond")
+      expect(rulesEngine.compareStraightFlush hand, center).toBe true
+
