@@ -12,6 +12,8 @@ class Card
   suitRank: ->
     suitRankDictionary = _.invert Suits
     parseInt(suitRankDictionary[@suit], 10)
+  equal: (card) ->
+    @rank == card.rank && @suit == card.suit
 
 
 module.exports = Card

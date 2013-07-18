@@ -26,6 +26,10 @@
       return parseInt(suitRankDictionary[this.suit], 10);
     };
 
+    Card.prototype.equal = function(card) {
+      return this.rank === card.rank && this.suit === card.suit;
+    };
+
     return Card;
 
   })();

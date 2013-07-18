@@ -19,6 +19,7 @@
       this.rulesEngine = new RulesEngine();
       this.playersPassed = 0;
       this.cardsInCenter = [];
+      this.history = [];
     }
 
     Game.prototype.addPlayer = function(player) {
@@ -58,9 +59,21 @@
     };
 
     Game.prototype.processTurn = function(id, cards) {
-      var result;
+      var diamondThree;
+      if (this.history.length === 0) {
+        diamondThree = _.find(cards, function(card) {
+          return card.equal(new Card(3, "Diamond"));
+        });
+        if (diamondThree != null) {
+          return this.rulesEngine.checkIfMoveIsValid(cards, this.cardsInCenter);
+        } else {
+          return false;
+        }
+      }
       if (this.players[this.whoseTurn].id === id) {
-        return result = this.rulesEngine.checkIfMoveIsValid(cards);
+        return this.rulesEngine.checkIfMoveIsValid(cards, this.cardsInCenter);
+      } else {
+        return false;
       }
     };
 

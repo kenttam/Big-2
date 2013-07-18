@@ -5,15 +5,22 @@ class RulesEngine
     
   checkIfMoveIsValid: (cards, cardsInCenter) ->
     if cardsInCenter.length == 0
-      return @validMove cards
+      return @validHand cards
     else if @isSingle cardsInCenter
       if @isSingle cards
-        return @validSingleMove cards, cardsInCenter
+        return @validSinglePlay cards, cardsInCenter
       else
         return false
     else if @isPair cardsInCenter
       if @isPair cards
-        return validPairPlay cards, cardsInCenter
+        return @validPairPlay cards, cardsInCenter
+      else
+        return false
+    else if @validFiveCardHand cardsInCenter
+      if @validFiveCardHand cards
+        return @validFiveCardsPlay cards, cardsInCenter
+      else
+        return false
       
   validSinglePlay: (cards, cardsInCenter) ->
     if cards[0].numericalRank() > cardsInCenter[0].numericalRank()
@@ -125,10 +132,10 @@ class RulesEngine
       return sortedCards[4].numericalRank()
      
   validHand: (cards) ->
-    @isSingle cards or @isPair cards or @validFiveCardMove cards
+    @isSingle(cards) or @isPair(cards) or @validFiveCardMove(cards)
 
   validFiveCardHand: (cards) ->
-    @isStraight cards or @isFlush cards or @isFullHouse cards or @isFourOfAKind
+    cards.length == 5 and (@isStraight(cards) or @isFlush(cards) or @isFullHouse(cards) or @isFourOfAKind(cards))
 
   isSingle: (cards) ->
     return cards.length == 1
@@ -141,7 +148,6 @@ class RulesEngine
     for x in [0...4]
       unless sortedCards[x].numericalRank() + 1 is sortedCards[x+1].numericalRank()
         return false
-
     return true
   isFlush: (cards) ->
     if(cards[0].suit == cards[1].suit == cards[2].suit == cards[3].suit == cards[4].suit)

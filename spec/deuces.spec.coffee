@@ -72,3 +72,24 @@ describe "The Game", ->
     game.players[3].hand = [new Card(3, "Diamond")]
     index = game.findPlayerIndexWithDiamondThree()
     expect(index).toBe 3
+  it "can process the first turn", ->
+    game.history = []
+    expect(game.processTurn(1, [new Card(3, "Spade"), new Card(3, "Diamond")])).toBe true
+    game.history = []
+    expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
+  it "can process a turn with a single card", ->
+    game.history = [new Card(3, "Diamond")]
+    game.cardsInCenter = [new Card(3, "Diamond")]
+    game.whoseTurn = 0
+    game.players[0] = new Player()
+    game.players[0].id = 1
+    expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade")])).toBe false
+    expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe true
+  it "can process turn with pairs", ->
+    game.cardsInCenter = [new Card(3, "Diamon"), new Card(3, "Heart")]
+    expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
+    expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade")])).toBe true
+  it "can process turn with five cards play", ->
+    game.cardsInCenter = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(4, "Diamond"), new Card(4, "Spade")]
+    expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
+    expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade"), new Card(4, "Club"), new Card(4, "Heart"), new Card(7, "Club")])).toBe true

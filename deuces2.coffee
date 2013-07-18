@@ -11,6 +11,7 @@ class Game
     @rulesEngine = new RulesEngine()
     @playersPassed = 0
     @cardsInCenter = []
+    @history = []
     
   addPlayer: (player) ->
     if player instanceof Player and @players.length < 4
@@ -41,9 +42,16 @@ class Game
     return playerNumber
 
   processTurn: (id, cards) ->
+    if @history.length == 0
+      diamondThree = _.find cards, (card)->
+        return card.equal(new Card(3, "Diamond"))
+      if diamondThree?
+        return @rulesEngine.checkIfMoveIsValid cards, @cardsInCenter
+      else
+        return false
     if @players[@whoseTurn].id == id
-      result = @rulesEngine.checkIfMoveIsValid(cards)
-    
-
+      return @rulesEngine.checkIfMoveIsValid(cards, @cardsInCenter)
+    else
+      return false
  
 exports.Game = Game
