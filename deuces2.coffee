@@ -46,12 +46,40 @@ class Game
       diamondThree = _.find cards, (card)->
         return card.equal(new Card(3, "Diamond"))
       if diamondThree?
-        return @rulesEngine.checkIfMoveIsValid cards, @cardsInCenter
+        if @rulesEngine.checkIfMoveIsValid cards, @cardsInCenter
+          @endTurn(cards)
+          return true
+        else
+          return false
       else
         return false
     if @players[@whoseTurn].id == id
-      return @rulesEngine.checkIfMoveIsValid(cards, @cardsInCenter)
+      if @rulesEngine.checkIfMoveIsValid(cards, @cardsInCenter)
+        @endTurn(cards)
+        return true
+      else
+        return false
     else
       return false
+  playerPassed: (id) ->
+    if @players[@whoseTurn].id == id
+      @endTurn()
+      return true
+    else
+      return false
+  endTurn:(cards) ->
+    if cards?
+      @history.push cards
+      @cardsInCenter = cards
+      @playersPassed = 0
+    else
+      @playersPassed += 1
+      if @playersPassed == 3
+        @cardsInCenter = []
+    @whoseTurn += 1
+    if @whoseTurn == 4
+      @whoseTurn = 0
+
+      
  
 exports.Game = Game

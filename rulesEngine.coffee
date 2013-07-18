@@ -132,7 +132,7 @@ class RulesEngine
       return sortedCards[4].numericalRank()
      
   validHand: (cards) ->
-    @isSingle(cards) or @isPair(cards) or @validFiveCardMove(cards)
+    @isSingle(cards) or @isPair(cards) or @validFiveCardHand(cards)
 
   validFiveCardHand: (cards) ->
     cards.length == 5 and (@isStraight(cards) or @isFlush(cards) or @isFullHouse(cards) or @isFourOfAKind(cards))

@@ -73,23 +73,55 @@ describe "The Game", ->
     index = game.findPlayerIndexWithDiamondThree()
     expect(index).toBe 3
   it "can process the first turn", ->
+    game.whoseTurn = 0
+    game.players[0] = new Player()
+    game.players[0].id = 1
     game.history = []
+    game.cardsInCenter = []
     expect(game.processTurn(1, [new Card(3, "Spade"), new Card(3, "Diamond")])).toBe true
     game.history = []
+    game.cardsInCenter = []
+    game.whoseTurn = 0
     expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
   it "can process a turn with a single card", ->
     game.history = [new Card(3, "Diamond")]
     game.cardsInCenter = [new Card(3, "Diamond")]
     game.whoseTurn = 0
-    game.players[0] = new Player()
-    game.players[0].id = 1
     expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade")])).toBe false
+    game.history = [new Card(3, "Diamond")]
+    game.cardsInCenter = [new Card(3, "Diamond")]
+    game.whoseTurn = 0
     expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe true
   it "can process turn with pairs", ->
     game.cardsInCenter = [new Card(3, "Diamon"), new Card(3, "Heart")]
+    game.whoseTurn = 0
     expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
+    game.cardsInCenter = [new Card(3, "Diamon"), new Card(3, "Heart")]
+    game.whoseTurn = 0
     expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade")])).toBe true
   it "can process turn with five cards play", ->
     game.cardsInCenter = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(4, "Diamond"), new Card(4, "Spade")]
+    game.whoseTurn = 0
     expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
+    game.whoseTurn = 0
     expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade"), new Card(4, "Club"), new Card(4, "Heart"), new Card(7, "Club")])).toBe true
+  it "can process 3 players passed", ->
+    player1 = new Player()
+    player1.id = 1
+    player2 = new Player()
+    player2.id = 2
+    player3 = new Player()
+    player3.id = 3
+    player4 = new Player()
+    player4.id = 4
+    game.players = [player1, player2, player3, player4]
+    game.whoseTurn = 0
+    game.cardsInCenter = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(4, "Diamond"), new Card(4, "Spade")]
+    game.playerPassed(1)
+    game.playerPassed(2)
+    expect(game.processTurn(3, [new Card(4, "Hearts")])).toBe false
+    game.playerPassed(3)
+    expect(game.processTurn(4, [new Card(4, "Hearts")])).toBe true
+    expect(game.whoseTurn).toBe 0
+    expect(game.playersPassed).toBe 0
+
