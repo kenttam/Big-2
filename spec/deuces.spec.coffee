@@ -76,6 +76,7 @@ describe "The Game", ->
     game.whoseTurn = 0
     game.players[0] = new Player()
     game.players[0].id = 1
+    game.players[0].hand = [new Card(3, "Spade"), new Card(3, "Diamond"), new Card(4, "Diamond")]
     game.history = []
     game.cardsInCenter = []
     expect(game.processTurn(1, [new Card(3, "Spade"), new Card(3, "Diamond")])).toBe true
@@ -87,6 +88,7 @@ describe "The Game", ->
     game.history = [new Card(3, "Diamond")]
     game.cardsInCenter = [new Card(3, "Diamond")]
     game.whoseTurn = 0
+    game.players[0].hand = [new Card(4, "Spade"), new Card(4, "Diamond")]
     expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade")])).toBe false
     game.history = [new Card(3, "Diamond")]
     game.cardsInCenter = [new Card(3, "Diamond")]
@@ -95,13 +97,16 @@ describe "The Game", ->
   it "can process turn with pairs", ->
     game.cardsInCenter = [new Card(3, "Diamon"), new Card(3, "Heart")]
     game.whoseTurn = 0
+    game.players[0].hand = [new Card(4, "Spade"), new Card(4, "Diamond")]
     expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
     game.cardsInCenter = [new Card(3, "Diamon"), new Card(3, "Heart")]
     game.whoseTurn = 0
+    game.players[0].hand = [new Card(4, "Spade"), new Card(4, "Diamond")]
     expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade")])).toBe true
   it "can process turn with five cards play", ->
     game.cardsInCenter = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(4, "Diamond"), new Card(4, "Spade")]
     game.whoseTurn = 0
+    game.players[0].hand = [new Card(4, "Diamond"), new Card(4, "Spade"), new Card(4, "Club"), new Card(4, "Heart"), new Card(7, "Club")]
     expect(game.processTurn(1, [new Card(4, "Diamond")])).toBe false
     game.whoseTurn = 0
     expect(game.processTurn(1, [new Card(4, "Diamond"), new Card(4, "Spade"), new Card(4, "Club"), new Card(4, "Heart"), new Card(7, "Club")])).toBe true
@@ -119,9 +124,21 @@ describe "The Game", ->
     game.cardsInCenter = [new Card(3, "Diamond"), new Card(3, "Heart"), new Card(3, "Spade"), new Card(4, "Diamond"), new Card(4, "Spade")]
     game.playerPassed(1)
     game.playerPassed(2)
+    game.players[2].hand = [new Card(4, "Hearts")]
     expect(game.processTurn(3, [new Card(4, "Hearts")])).toBe false
     game.playerPassed(3)
+    game.players[3].hand = [new Card(4, "Hearts")]
     expect(game.processTurn(4, [new Card(4, "Hearts")])).toBe true
     expect(game.whoseTurn).toBe 0
     expect(game.playersPassed).toBe 0
-
+  it "can tell if a player has a card", ->
+    game.whoseTurn = 0
+    game.players[0].hand = [new Card(3, "Diamond")]
+    expect(game.currentPlayerHasCards([new Card(3, "Diamond")])).toBe true
+    expect(game.currentPlayerHasCards([new Card(4, "Diamond")])).toBe false
+  it "can remove cards from a player's hand after it has been played", ->
+    game.whoseTurn = 0
+    game.players[0].hand = [new Card(3, "Spade")]
+    game.cardsInCenter = []
+    expect(game.processTurn(1, [new Card(3, "Spade")])).toBe true
+    expect(game.players[0].hand.length).toBe 0

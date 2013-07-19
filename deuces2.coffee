@@ -46,7 +46,7 @@ class Game
       diamondThree = _.find cards, (card)->
         return card.equal(new Card(3, "Diamond"))
       if diamondThree?
-        if @rulesEngine.checkIfMoveIsValid cards, @cardsInCenter
+        if @rulesEngine.checkIfMoveIsValid(cards, @cardsInCenter) and @currentPlayerHasCards(cards)
           @endTurn(cards)
           return true
         else
@@ -54,7 +54,7 @@ class Game
       else
         return false
     if @players[@whoseTurn].id == id
-      if @rulesEngine.checkIfMoveIsValid(cards, @cardsInCenter)
+      if @rulesEngine.checkIfMoveIsValid(cards, @cardsInCenter) and @currentPlayerHasCards(cards)
         @endTurn(cards)
         return true
       else
@@ -72,6 +72,7 @@ class Game
       @history.push cards
       @cardsInCenter = cards
       @playersPassed = 0
+      @removeCardFromPlayersHand cards
     else
       @playersPassed += 1
       if @playersPassed == 3
@@ -79,6 +80,21 @@ class Game
     @whoseTurn += 1
     if @whoseTurn == 4
       @whoseTurn = 0
+  currentPlayerHasCards: (cards) ->
+    for card in cards
+      found = _.find @players[@whoseTurn].hand, (cardInHand) ->
+        return cardInHand.equal(card)
+      unless found?
+        return false
+    return true
+  removeCardFromPlayersHand: (cardsToRemove) ->
+    @players[@whoseTurn].hand = _.reject @players[@whoseTurn].hand, (cardInHand) ->
+      found = _.find cardsToRemove, (cardToRemove) ->
+        return cardInHand.equal(cardToRemove)
+      unless found?
+        return false
+      return true
+    
 
       
  
