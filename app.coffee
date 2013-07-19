@@ -18,9 +18,8 @@ app.use(stylus.middleware(
 app.use(express.static(__dirname + '/public'))
 
 app.get '/', (req, res) ->
-  body = "Hello world"
-  res.setHeader "Content-Type", "text/plain"
-  res.setHeader "Content-Length", body.length
-  res.end(body)
+  res.render('index',
+    title: 'Home'
+  )
 
 app.listen 3000

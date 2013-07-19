@@ -28,11 +28,9 @@
   app.use(express["static"](__dirname + '/public'));
 
   app.get('/', function(req, res) {
-    var body;
-    body = "Hello world";
-    res.setHeader("Content-Type", "text/plain");
-    res.setHeader("Content-Length", body.length);
-    return res.end(body);
+    return res.render('index', {
+      title: 'Home'
+    });
   });
 
   app.listen(3000);
