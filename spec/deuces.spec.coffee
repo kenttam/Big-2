@@ -1,7 +1,7 @@
-deuces = require "../deuces2"
-Card = require "../card"
-Deck = require "../deck"
-Player = require "../player"
+deuces = require "../models/deuces2"
+Card = require "../models/card"
+Deck = require "../models/deck"
+Player = require "../models/player"
 _ = require "../lib/underscore-min"
 
 describe "The module", ->

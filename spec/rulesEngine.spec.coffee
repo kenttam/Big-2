@@ -1,5 +1,5 @@
-RulesEngine = require "../rulesEngine"
-Card = require "../card"
+RulesEngine = require "../models/rulesEngine"
+Card = require "../models/card"
 
 describe "The Rules Engine", ->
   rulesEngine = new RulesEngine()
