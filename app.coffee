@@ -2,6 +2,9 @@ express = require 'express'
 stylus = require "stylus"
 nib = require "nib"
 app = express()
+server = require('http').createServer(app)
+server.listen(3000)
+io = require("socket.io").listen(server)
 
 compile = (str, path) ->
   return stylus(str)
@@ -22,4 +25,12 @@ app.get '/', (req, res) ->
     title: 'Home'
   )
 
-app.listen 3000
+
+io.sockets.on('connection', (socket) ->
+  socket.emit 'message', { message: "Welcome to Big 2" }
+  socket.on "room", (room)->
+    socket.join(room)
+)
+
+room = "helloworld"
+io.sockets.in(room).emit("message", "what's up")
