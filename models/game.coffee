@@ -95,7 +95,4 @@ class Game
         return false
       return true
     
-
-      
- 
-exports.Game = Game
+module.exports = Game
