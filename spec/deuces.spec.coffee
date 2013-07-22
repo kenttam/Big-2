@@ -1,14 +1,10 @@
-deuces = require "../models/deuces2"
 Card = require "../models/card"
 Deck = require "../models/deck"
 Player = require "../models/player"
+Game = require "../models/game"
 _ = require "../lib/underscore-min"
 
-describe "The module", ->
-	it "is not null", ->
-		expect(deuces).not.toBe null
-
-game = new deuces.Game()
+game = new Game()
 
 describe "The Deck", ->
   it "is not null", ->
@@ -32,9 +28,9 @@ describe "The Card", ->
     expect(card.numericalRank()).toBe 0
 
 describe "The Game", ->
-  game = new deuces.Game()
+  game = new Game()
   it "is not null", ->
-    expect(deuces.Game?).toBe true
+    expect(Game?).toBe true
   it "has a deck", ->
     expect(game.deck?).toBe true
   it "has players", ->
@@ -56,7 +52,7 @@ describe "The Game", ->
     game.addPlayer player5
     expect(game.players.length).toBe 4
   it "should not add something that's not a player", ->
-    game2 = new deuces.Game()
+    game2 = new Game()
     game2.addPlayer 1
     expect(game2.players.length).toBe 0
   it "can pass out cards to players", ->

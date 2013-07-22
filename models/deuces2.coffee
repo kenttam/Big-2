@@ -5,7 +5,7 @@ Player = require "./player"
 RulesEngine = require "./rulesEngine"
 
 class Game
-  constructor: (@name)->
+  constructor: ->
     @deck = new Deck()
     @players = []
     @rulesEngine = new RulesEngine()
@@ -14,7 +14,7 @@ class Game
     @history = []
     
   addPlayer: (player) ->
-    if @players.length < 4
+    if player instanceof Player and @players.length < 4
       @players.push player
       player.game = this
   
@@ -95,4 +95,7 @@ class Game
         return false
       return true
     
-module.exports = Game
+
+      
+ 
+exports = Game
