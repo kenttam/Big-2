@@ -1,0 +1,27 @@
+angular.module('deuces', [], ($provide) ->
+  $provide.factory 'socket', ($rootScope) ->
+    socket = io.connect()
+    return {
+      on: (eventName, callback) ->
+        socket.on(eventName, ->
+          args = arguments
+          $rootScope.$apply( ->
+            callback.apply(socket, args)
+          )
+        )
+      emit: (eventName, data, callback) ->
+        socket.emit(eventName, data, ->
+          args = arguments
+          $rootScope.$apply( ->
+            if (callback)
+              callback.apply(socket, args)
+          )
+        )
+    }
+)
+
+safeApply = (scope, fn) ->
+  if scope.$$phase
+    fn()
+  else
+    scope.$apply fn
