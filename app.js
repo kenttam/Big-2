@@ -104,7 +104,7 @@
     });
     return io.sockets["in"](room).emit('players:updated', {
       players: _.map(currentGame[socket.id].players, function(player) {
-        return _.omit(player, "game");
+        return _.omit(player, ["game", "hand"]);
       })
     });
   };

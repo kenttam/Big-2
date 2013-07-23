@@ -31,10 +31,10 @@ class Game
       return false
      
   passOutCards: ->
-    @players[0].hand = @deck.cards[0...13]
-    @players[1].hand = @deck.cards[13...26]
-    @players[2].hand = @deck.cards[26...39]
-    @players[3].hand = @deck.cards[39...52]
+    @players[0].hand = @deck.cards[0...13].sort(@rulesEngine.compareSingleCard)
+    @players[1].hand = @deck.cards[13...26].sort(@rulesEngine.compareSingleCard)
+    @players[2].hand = @deck.cards[26...39].sort(@rulesEngine.compareSingleCard)
+    @players[3].hand = @deck.cards[39...52].sort(@rulesEngine.compareSingleCard)
     
   findPlayerIndexWithDiamondThree: ->
     diamondThree = new Card(3, "Diamond")

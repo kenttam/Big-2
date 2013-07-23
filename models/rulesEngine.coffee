@@ -23,12 +23,19 @@ class RulesEngine
         return false
       
   validSinglePlay: (cards, cardsInCenter) ->
-    if cards[0].numericalRank() > cardsInCenter[0].numericalRank()
+    if @compareSingleCard(cards[0], cardsInCenter[0]) > 0
       return true
-    else if cards[0].numericalRank() == cardsInCenter[0].numericalRank()
-      return cards[0].suitRank() > cardsInCenter[0].suitRank()
     else
       return false
+
+  compareSingleCard: (a, b) ->
+    if a.numericalRank() > b.numericalRank()
+      return 1
+    else if a.numericalRank() == b.numericalRank()
+      return a.suitRank() - b.suitRank()
+    else
+      return -1
+
   
   validPairPlay: (cards, cardsInCenter) ->
     if cards[0].numericalRank() > cardsInCenter[0].numericalRank()

@@ -29,9 +29,16 @@
     socket.on("update:turn", function(data) {
       return $scope.whoseTurn = data;
     });
-    return socket.on("hand", function(data) {
+    socket.on("hand", function(data) {
       return $scope.hand = data;
     });
+    return $scope.suitSpecialCharacter = function(suit) {
+      if (suit === "Diamond") {
+        return "&diams;";
+      } else {
+        return "&" + suit.toLowerCase() + "s;";
+      }
+    };
   };
 
 }).call(this);

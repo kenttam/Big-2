@@ -67,6 +67,6 @@ joinRoom = (socket, room) ->
   socket.emit("joined:game", {room: room, playerIndex: playerIndex})
   io.sockets.in(room).emit('players:updated', {
     players: _.map(currentGame[socket.id].players, (player) ->
-      _.omit(player, "game")
+      _.omit(player, ["game", "hand"])
     )
   })

@@ -20,3 +20,8 @@ window.GameController = ($scope, socket) ->
     $scope.whoseTurn = data
   socket.on "hand", (data) ->
     $scope.hand = data
+  $scope.suitSpecialCharacter = (suit) ->
+    if suit == "Diamond"
+      return "&diams;"
+    else
+      return "&" + suit.toLowerCase() + "s;"
