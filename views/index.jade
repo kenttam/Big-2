@@ -4,11 +4,20 @@ block script
   script(src="/javascripts/services.js")
   script(src="/javascripts/index.js")
 block content
-  .main-container
-    p Welcome to Big 2!
-    form(ng-controller="RoomController", ng-submit="requestRoom()")
+  .main-container(ng-controller="RoomController") 
+    p Welcome to Big 2! You are {{playerName}}
+    form(ng-submit="requestRoom()", ng-show="inRoom == false")
       input(type="text", name="roomName", ng-model="roomName")
       button Join Room
+    p(ng-show="inRoom == true") You are in room {{roomName}}
   .game-container(ng-controller="GameController")
-    ul(ng-repeat="player in players")
-      li {{player.name}}
+    p(ng-show="playerIndex != null") You are Player {{playerIndex + 1}}
+    p(ng-show="whoseTurn != null") It is Player {{whoseTurn + 1}} 's turn
+    ul
+      li(ng-repeat="player in players") 
+        {{player.name}}
+    a.btn(ng-show="players.length == 4", ng-click="startGame()") Start Game!
+    ul
+      li(ng-repeat="card in hand")
+        {{card.rank}} of {{card.suit}}
+

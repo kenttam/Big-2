@@ -40,6 +40,12 @@ io.sockets.on('connection', (socket) ->
   guestNumber = assignGuestName(socket, guestNumber, nickNames, namesUsed)
   socket.on "room", (room)->
     joinRoom(socket, room)
+  socket.on "startGame", ->
+    whoseTurn = currentGame[socket.id].start()
+    currentRoom = currentGame[socket.id].room
+    io.sockets.in(currentRoom).emit("update:turn", whoseTurn)
+    for socket in io.sockets.clients(currentRoom)
+      socket.emit("hand", players[socket.id].hand)
 )
 
 assignGuestName = (socket, guestNumber, nickNames, namesUsed) ->
@@ -57,8 +63,9 @@ joinRoom = (socket, room) ->
   unless games[room]?
     games[room] = new Game(room)
   currentGame[socket.id] = games[room]
-  currentGame[socket.id].addPlayer(players[socket.id])
-  io.sockets.in(room).emit('joined', {
+  playerIndex = currentGame[socket.id].addPlayer(players[socket.id])
+  socket.emit("joined:game", {room: room, playerIndex: playerIndex})
+  io.sockets.in(room).emit('players:updated', {
     players: _.map(currentGame[socket.id].players, (player) ->
       _.omit(player, "game")
     )

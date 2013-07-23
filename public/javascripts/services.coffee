@@ -20,8 +20,3 @@ angular.module('deuces', [], ($provide) ->
     }
 )
 
-safeApply = (scope, fn) ->
-  if scope.$$phase
-    fn()
-  else
-    scope.$apply fn

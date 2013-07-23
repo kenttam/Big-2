@@ -17,12 +17,18 @@ class Game
     if @players.length < 4
       @players.push player
       player.game = this
+      return @players.length - 1
+    else
+      return false
   
   start: ->
     if @players.length == 4
       @deck.shuffle()
       @passOutCards()
       @whoseTurn = @findPlayerIndexWithDiamondThree()
+      return @whoseTurn
+    else
+      return false
      
   passOutCards: ->
     @players[0].hand = @deck.cards[0...13]
