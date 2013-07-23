@@ -1,4 +1,4 @@
-_ = require "../lib/underscore-min"
+_ = require "../public/javascripts/lib/underscore-min"
 
 class RulesEngine
   constructor: ()->

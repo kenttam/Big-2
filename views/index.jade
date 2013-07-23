@@ -6,9 +6,10 @@ block script
 block content
   .main-container(ng-controller="RoomController") 
     p Welcome to Big 2! You are {{playerName}}
-    form(ng-submit="requestRoom()", ng-show="inRoom == false")
+    form(ng-submit="requestRoom()")
       input(type="text", name="roomName", ng-model="roomName")
       button Join Room
+    a.btn.btn-primary(ng-click="startTestGame()") Start Test Game
     p(ng-show="inRoom == true") You are in room {{roomName}}
   .game-container(ng-controller="GameController")
     p(ng-show="playerIndex != null") You are Player {{playerIndex + 1}}
@@ -18,7 +19,25 @@ block content
         {{player.name}}
     a.btn(ng-show="players.length == 4", ng-click="startGame()") Start Game!
     .hand.playingCards
-      a(ng-repeat="card in hand", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s")
+      a(ng-repeat="card in hand", ng-click="card.selected = !card.selected", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
         span.rank {{card.rank}}
         span.suit(ng-bind-html-unsafe="suitSpecialCharacter(card.suit)")
+      a.btn.btn-primary(ng-click="playCards()") Play
+    .clearfix
+    h1 Center
+    .playingCards
+      a(ng-repeat="card in center", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
+        span.rank {{card.rank}}
+        span.suit(ng-bind-html-unsafe="suitSpecialCharacter(card.suit)")
+    h1 History  
+    .player-container(ng-repeat="player in players")
+      h2 Player {{$index + 1}}
+      .playingCards
+        a(ng-repeat="card in player.lastPlayed", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
+          span.rank {{card.rank}}
+          span.suit(ng-bind-html-unsafe="suitSpecialCharacter(card.suit)")
+      
+
+  
+
 

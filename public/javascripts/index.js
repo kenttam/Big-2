@@ -5,6 +5,9 @@
     $scope.requestRoom = function() {
       return socket.emit('room', $scope.roomName);
     };
+    $scope.startTestGame = function() {
+      return socket.emit('startTestGame');
+    };
     socket.on("joined:game", function(data) {
       $scope.roomName = data.room;
       return $scope.inRoom = true;
@@ -32,13 +35,25 @@
     socket.on("hand", function(data) {
       return $scope.hand = data;
     });
-    return $scope.suitSpecialCharacter = function(suit) {
+    $scope.suitSpecialCharacter = function(suit) {
       if (suit === "Diamond") {
         return "&diams;";
       } else {
         return "&" + suit.toLowerCase() + "s;";
       }
     };
+    $scope.playCards = function() {
+      return socket.emit('play:cards', $scope.selectedCards());
+    };
+    $scope.selectedCards = function() {
+      return _.filter($scope.hand, function(card) {
+        return card.selected;
+      });
+    };
+    return socket.on("update:game", function(data) {
+      $scope.players = data.players;
+      return $scope.center = data.center;
+    });
   };
 
 }).call(this);

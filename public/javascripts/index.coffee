@@ -2,6 +2,8 @@ window.RoomController = ($scope, socket) ->
   $scope.inRoom = false
   $scope.requestRoom = ->
     socket.emit('room', $scope.roomName)
+  $scope.startTestGame = ->
+    socket.emit('startTestGame')
   socket.on "joined:game", (data) ->
     $scope.roomName = data.room
     $scope.inRoom = true
@@ -25,3 +27,12 @@ window.GameController = ($scope, socket) ->
       return "&diams;"
     else
       return "&" + suit.toLowerCase() + "s;"
+  $scope.playCards = ->
+    socket.emit('play:cards', $scope.selectedCards())
+  $scope.selectedCards = ->
+    _.filter $scope.hand, (card) ->
+      return card.selected
+  socket.on "update:game", (data) ->
+    $scope.players = data.players
+    $scope.center = data.center
+   

@@ -1,3 +1,6 @@
-.playingCards a.card {
+.hand.playingCards a.card {
   float: left;
+}
+.hand.playingCards a.card.selected {
+  bottom: 1em;
 }

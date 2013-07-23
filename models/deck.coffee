@@ -1,7 +1,7 @@
 Ranks = require "./ranks"
 Suits = require "./suits"
 Card = require "./card"
-_ = require "../lib/underscore-min"
+_ = require "../public/javascripts/lib/underscore-min"
 
 class Deck
   constructor: ->

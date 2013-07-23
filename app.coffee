@@ -7,7 +7,8 @@ server.listen(3000)
 io = require("socket.io").listen(server)
 Player = require "./models/Player"
 Game = require "./models/Game"
-_ = require "./lib/underscore-min"
+Card = require "./models/Card"
+_ = require "./public/javascripts/lib/underscore-min"
 
 
 compile = (str, path) ->
@@ -46,7 +47,28 @@ io.sockets.on('connection', (socket) ->
     io.sockets.in(currentRoom).emit("update:turn", whoseTurn)
     for socket in io.sockets.clients(currentRoom)
       socket.emit("hand", players[socket.id].hand)
+  socket.on "startTestGame", ->
+    games["test"] = null
+    joinRoom(socket, "test")
+    currentGame[socket.id].addPlayer new Player(1, "test2")
+    currentGame[socket.id].addPlayer new Player(1, "test3")
+    currentGame[socket.id].addPlayer new Player(1, "test4")
+    currentGame[socket.id].start()
+    currentGame[socket.id].whoseTurn = 0
+    currentGame[socket.id].players[0].hand[0] = new Card(3, "Diamond")
+    socket.emit("hand", players[socket.id].hand)
+  socket.on "play:cards", (data) ->
+    cards = _.map data, (card) ->
+      new Card(card.rank, card.suit)
+    currentGame[socket.id].processTurn(socket.id, cards)
+    socket.emit("hand", players[socket.id].hand)
+    currentPlayers = _.map(currentGame[socket.id].players, (player) ->
+      _.omit(player, ["game", "hand"])
+    )
+    io.sockets.in(currentGame[socket.id].room).emit("update:game", { center: currentGame[socket.id].cardsInCenter, players: currentPlayers})
 )
+
+
 
 assignGuestName = (socket, guestNumber, nickNames, namesUsed) ->
   name = "Guest" + guestNumber

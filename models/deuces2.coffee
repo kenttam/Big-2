@@ -1,4 +1,4 @@
-_ = require "../lib/underscore-min"
+_ = require "../public/javascripts/lib/underscore-min"
 Card = require "./card"
 Deck = require "./deck"
 Player = require "./player"

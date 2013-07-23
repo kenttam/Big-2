@@ -2,7 +2,7 @@ Card = require "../models/card"
 Deck = require "../models/deck"
 Player = require "../models/player"
 Game = require "../models/game"
-_ = require "../lib/underscore-min"
+_ = require "../public/javascripts/lib/underscore-min"
 
 game = new Game()
 
