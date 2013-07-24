@@ -39,14 +39,17 @@ games = {}
 
 io.sockets.on('connection', (socket) ->
   guestNumber = assignGuestName(socket, guestNumber, nickNames, namesUsed)
+
   socket.on "room", (room)->
     joinRoom(socket, room)
+    
   socket.on "startGame", ->
     whoseTurn = currentGame[socket.id].start()
     currentRoom = currentGame[socket.id].room
     io.sockets.in(currentRoom).emit("update:turn", whoseTurn)
     for socket in io.sockets.clients(currentRoom)
       socket.emit("hand", players[socket.id].hand)
+
   socket.on "startTestGame", ->
     games["test"] = null
     joinRoom(socket, "test")
@@ -57,6 +60,7 @@ io.sockets.on('connection', (socket) ->
     currentGame[socket.id].whoseTurn = 0
     currentGame[socket.id].players[0].hand[0] = new Card(3, "Diamond")
     socket.emit("hand", players[socket.id].hand)
+
   socket.on "play:cards", (data) ->
     cards = _.map data, (card) ->
       new Card(card.rank, card.suit)
@@ -65,7 +69,15 @@ io.sockets.on('connection', (socket) ->
     currentPlayers = _.map(currentGame[socket.id].players, (player) ->
       _.omit(player, ["game", "hand"])
     )
-    io.sockets.in(currentGame[socket.id].room).emit("update:game", { center: currentGame[socket.id].cardsInCenter, players: currentPlayers})
+    io.sockets.in(currentGame[socket.id].room).emit("update:game", { center: currentGame[socket.id].cardsInCenter, players: currentPlayers, whoseTurn: currentGame[socket.id].whoseTurn})
+
+  socket.on "pass", ->
+    currentGame[socket.id].playerPassed(socket.id)
+    currentPlayers = _.map(currentGame[socket.id].players, (player) ->
+      _.omit(player, ["game", "hand"])
+    )
+    io.sockets.in(currentGame[socket.id].room).emit("update:game", { center: currentGame[socket.id].cardsInCenter, players: currentPlayers, whoseTurn: currentGame[socket.id].whoseTurn})
+
 )
 
 

@@ -22,7 +22,8 @@ block content
       a(ng-repeat="card in hand", ng-click="card.selected = !card.selected", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
         span.rank {{card.rank}}
         span.suit(ng-bind-html-unsafe="suitSpecialCharacter(card.suit)")
-      a.btn.btn-primary(ng-click="playCards()") Play
+      a.btn.btn-primary(ng-click="playCards()", ng-show="selectedCards().length > 0") Play
+      a.btn.btn-primary(ng-click="pass()", ng-show="selectedCards().length == 0") Pass
     .clearfix
     h1 Center
     .playingCards
@@ -32,6 +33,7 @@ block content
     h1 History  
     .player-container(ng-repeat="player in players")
       h2 Player {{$index + 1}}
+      p(ng-show="player.passed") "Pass"
       .playingCards
         a(ng-repeat="card in player.lastPlayed", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
           span.rank {{card.rank}}

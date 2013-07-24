@@ -50,9 +50,13 @@
         return card.selected;
       });
     };
+    $scope.pass = function() {
+      return socket.emit('pass');
+    };
     return socket.on("update:game", function(data) {
       $scope.players = data.players;
-      return $scope.center = data.center;
+      $scope.center = data.center;
+      return $scope.whoseTurn = data.whoseTurn;
     });
   };
 

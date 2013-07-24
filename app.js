@@ -88,7 +88,7 @@
       currentGame[socket.id].players[0].hand[0] = new Card(3, "Diamond");
       return socket.emit("hand", players[socket.id].hand);
     });
-    return socket.on("play:cards", function(data) {
+    socket.on("play:cards", function(data) {
       var cards, currentPlayers;
       cards = _.map(data, function(card) {
         return new Card(card.rank, card.suit);
@@ -100,7 +100,20 @@
       });
       return io.sockets["in"](currentGame[socket.id].room).emit("update:game", {
         center: currentGame[socket.id].cardsInCenter,
-        players: currentPlayers
+        players: currentPlayers,
+        whoseTurn: currentGame[socket.id].whoseTurn
+      });
+    });
+    return socket.on("pass", function() {
+      var currentPlayers;
+      currentGame[socket.id].playerPassed(socket.id);
+      currentPlayers = _.map(currentGame[socket.id].players, function(player) {
+        return _.omit(player, ["game", "hand"]);
+      });
+      return io.sockets["in"](currentGame[socket.id].room).emit("update:game", {
+        center: currentGame[socket.id].cardsInCenter,
+        players: currentPlayers,
+        whoseTurn: currentGame[socket.id].whoseTurn
       });
     });
   });

@@ -32,7 +32,10 @@ window.GameController = ($scope, socket) ->
   $scope.selectedCards = ->
     _.filter $scope.hand, (card) ->
       return card.selected
+  $scope.pass = ->
+    socket.emit('pass')
   socket.on "update:game", (data) ->
     $scope.players = data.players
     $scope.center = data.center
+    $scope.whoseTurn = data.whoseTurn
    

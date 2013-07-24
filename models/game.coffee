@@ -68,7 +68,8 @@ class Game
     else
       return false
   playerPassed: (id) ->
-    if @players[@whoseTurn].id == id
+    if @players[@whoseTurn].id == id and @playersPassed < 3
+      @players[@whoseTurn].passed = true
       @endTurn()
       return true
     else
@@ -78,11 +79,15 @@ class Game
       @history.push cards
       @cardsInCenter = cards
       @playersPassed = 0
+      _.each(@players , (player) ->
+        player.passed = false
+      )
       @removeCardFromPlayersHand cards
     else
       @playersPassed += 1
       if @playersPassed == 3
         @cardsInCenter = []
+    @players[@whoseTurn].lastPlayed = cards
     @whoseTurn += 1
     if @whoseTurn == 4
       @whoseTurn = 0
@@ -100,6 +105,5 @@ class Game
       unless found?
         return false
       return true
-    @players[@whoseTurn].lastPlayed = cardsToRemove
     
 module.exports = Game
