@@ -15,7 +15,7 @@ class Game
     @gameOver = false
     
   addPlayer: (player) ->
-    if @players.length < 4
+    if @players.length < 4 and player.constructor.name == "Player"
       @players.push player
       player.game = this
       return @players.length - 1
