@@ -27,7 +27,7 @@ block content
     .clearfix
     h1 Center
     .game-over-message.alert(ng-show="gameOver")
-      p Winner: Player {{winnerIndex}}
+      p Winner: Player {{winnerIndex + 1}}
     .playingCards
       a(ng-repeat="card in center", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
         span.rank {{card.rank}}
