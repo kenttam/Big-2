@@ -69,7 +69,10 @@ io.sockets.on('connection', (socket) ->
     currentPlayers = _.map(currentGame[socket.id].players, (player) ->
       _.omit(player, ["game", "hand"])
     )
-    io.sockets.in(currentGame[socket.id].room).emit("update:game", { center: currentGame[socket.id].cardsInCenter, players: currentPlayers, whoseTurn: currentGame[socket.id].whoseTurn})
+    if currentGame[socket.id].gameOver
+      io.sockets.in(currentGame[socket.id].room).emit("gameOver", { center: currentGame[socket.id].cardsInCenter, players: currentPlayers, whoseTurn: currentGame[socket.id].whoseTurn})
+    else
+      io.sockets.in(currentGame[socket.id].room).emit("update:game", { center: currentGame[socket.id].cardsInCenter, players: currentPlayers, whoseTurn: currentGame[socket.id].whoseTurn})
 
   socket.on "pass", ->
     currentGame[socket.id].playerPassed(socket.id)

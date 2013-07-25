@@ -38,4 +38,9 @@ window.GameController = ($scope, socket) ->
     $scope.players = data.players
     $scope.center = data.center
     $scope.whoseTurn = data.whoseTurn
+  socket.on "gameOver", (data) ->
+    $scope.players = data.players
+    $scope.gameOver = true
+    $scope.winnerIndex = data.whoseTurn
+
    

@@ -12,6 +12,7 @@ class Game
     @playersPassed = 0
     @cardsInCenter = []
     @history = []
+    @gameOver = false
     
   addPlayer: (player) ->
     if @players.length < 4
@@ -26,6 +27,7 @@ class Game
       @deck.shuffle()
       @passOutCards()
       @whoseTurn = @findPlayerIndexWithDiamondThree()
+      @gameOver = false
       return @whoseTurn
     else
       return false
@@ -88,6 +90,9 @@ class Game
       if @playersPassed == 3
         @cardsInCenter = []
     @players[@whoseTurn].lastPlayed = cards
+    if @players[@whoseTurn].hand.length == 0
+      @gameOver = true
+      return
     @whoseTurn += 1
     if @whoseTurn == 4
       @whoseTurn = 0

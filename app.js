@@ -98,11 +98,19 @@
       currentPlayers = _.map(currentGame[socket.id].players, function(player) {
         return _.omit(player, ["game", "hand"]);
       });
-      return io.sockets["in"](currentGame[socket.id].room).emit("update:game", {
-        center: currentGame[socket.id].cardsInCenter,
-        players: currentPlayers,
-        whoseTurn: currentGame[socket.id].whoseTurn
-      });
+      if (currentGame[socket.id].gameOver) {
+        return io.sockets["in"](currentGame[socket.id].room).emit("gameOver", {
+          center: currentGame[socket.id].cardsInCenter,
+          players: currentPlayers,
+          whoseTurn: currentGame[socket.id].whoseTurn
+        });
+      } else {
+        return io.sockets["in"](currentGame[socket.id].room).emit("update:game", {
+          center: currentGame[socket.id].cardsInCenter,
+          players: currentPlayers,
+          whoseTurn: currentGame[socket.id].whoseTurn
+        });
+      }
     });
     return socket.on("pass", function() {
       var currentPlayers;
