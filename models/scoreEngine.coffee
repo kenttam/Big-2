@@ -6,7 +6,9 @@ class ScoreEngine
     totalSubtracted = @scoreLosingPlayers(players)
     winner = _.find players, (player) ->
       player.hand.length is 0
+    console.log winner
     winner.scoreForTheRound = -1 * totalSubtracted
+    winner.scoreHistory.push winner.scoreForTheRound
     winner.totalScore += winner.scoreForTheRound
 
   scoreLosingPlayers: (players) ->

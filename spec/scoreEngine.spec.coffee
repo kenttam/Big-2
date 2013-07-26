@@ -40,5 +40,10 @@ describe "The Score Engine", ->
       expect(player3.scoreForTheRound).toBe -36
     it "can score the winning player", ->
       scoreEngine.scoreGame(players)
+      console.log player1
       expect(player1.scoreForTheRound).toBe(2 + 18 + 36)
+    it "can keep score history for players", ->
+      expect(player1.scoreHistory.length).toBe 1
+      expect(player1.scoreHistory[0]).toBe(2 + 18 + 36)
+
     

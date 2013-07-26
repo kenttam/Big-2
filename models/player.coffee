@@ -6,6 +6,7 @@ class Player
     @passed = false
     @totalScore = 0
     @scoreForTheRound = 0
+    @scoreHistory = []
   playCards: (cards)->
     game.processTurn(@id, cards)
 
