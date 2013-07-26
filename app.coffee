@@ -3,7 +3,8 @@ stylus = require "stylus"
 nib = require "nib"
 app = express()
 server = require('http').createServer(app)
-server.listen(3000)
+port = process.env.PORT || 3000
+server.listen(port)
 io = require("socket.io").listen(server)
 Player = require "./models/player"
 Game = require "./models/game"
