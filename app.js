@@ -18,9 +18,9 @@
 
   Player = require("./models/player");
 
-  Game = require("./models/Game");
+  Game = require("./models/game");
 
-  Card = require("./models/Card");
+  Card = require("./models/card");
 
   _ = require("./public/javascripts/lib/underscore-min");
 

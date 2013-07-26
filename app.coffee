@@ -6,8 +6,8 @@ server = require('http').createServer(app)
 server.listen(3000)
 io = require("socket.io").listen(server)
 Player = require "./models/player"
-Game = require "./models/Game"
-Card = require "./models/Card"
+Game = require "./models/game"
+Card = require "./models/card"
 _ = require "./public/javascripts/lib/underscore-min"
 
 
