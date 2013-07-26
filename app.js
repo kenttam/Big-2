@@ -16,7 +16,7 @@
 
   io = require("socket.io").listen(server);
 
-  Player = require("./models/player");
+  Player = require("./models/Player");
 
   Game = require("./models/Game");
 
