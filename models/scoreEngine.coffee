@@ -8,8 +8,8 @@ class ScoreEngine
       player.hand.length is 0
     console.log winner
     winner.scoreForTheRound = -1 * totalSubtracted
-    winner.scoreHistory.push winner.scoreForTheRound
     winner.totalScore += winner.scoreForTheRound
+    winner.scoreHistory.push winner.totalScore
 
   scoreLosingPlayers: (players) ->
     that = this

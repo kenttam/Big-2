@@ -16,8 +16,8 @@
       });
       console.log(winner);
       winner.scoreForTheRound = -1 * totalSubtracted;
-      winner.scoreHistory.push(winner.scoreForTheRound);
-      return winner.totalScore += winner.scoreForTheRound;
+      winner.totalScore += winner.scoreForTheRound;
+      return winner.scoreHistory.push(winner.totalScore);
     };
 
     ScoreEngine.prototype.scoreLosingPlayers = function(players) {

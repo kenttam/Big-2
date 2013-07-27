@@ -40,6 +40,7 @@ block content
         a(ng-repeat="card in player.lastPlayed", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
           span.rank {{card.rank}}
           span.suit(ng-bind-html-unsafe="suitSpecialCharacter(card.suit)")
+
       
 
   
