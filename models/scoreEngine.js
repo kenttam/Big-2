@@ -42,6 +42,9 @@
       }
       player.scoreForTheRound = -1 * multiplier * numCardsLeft;
       player.totalScore += player.scoreForTheRound;
+      if (player.scoreForTheRound < 0) {
+        player.scoreHistory.push(player.totalScore);
+      }
       return player.scoreForTheRound;
     };
 

@@ -40,6 +40,24 @@ block content
         a(ng-repeat="card in player.lastPlayed", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")
           span.rank {{card.rank}}
           span.suit(ng-bind-html-unsafe="suitSpecialCharacter(card.suit)")
+    h1 Scores
+    table.table.table-striped
+      thead
+        tr
+          th Round Number
+          th Player 1
+          th Player 2
+          th Player 3
+          th Player 4
+      tbody
+        tr(ng-repeat="round in players[0].scoreHistory")
+          th {{$index + 1}}
+          th {{players[0].scoreHistory[$index]}}
+          th {{players[1].scoreHistory[$index]}}
+          th {{players[2].scoreHistory[$index]}}
+          th {{players[3].scoreHistory[$index]}}
+
+
 
       
 

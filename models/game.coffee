@@ -3,12 +3,14 @@ Card = require "./card"
 Deck = require "./deck"
 Player = require "./player"
 RulesEngine = require "./rulesEngine"
+ScoreEngine = require "./scoreEngine"
 
 class Game
   constructor: (@name)->
     @deck = new Deck()
     @players = []
     @rulesEngine = new RulesEngine()
+    @scoreEngine = new ScoreEngine()
     @playersPassed = 0
     @cardsInCenter = []
     @history = []
@@ -92,6 +94,7 @@ class Game
     @players[@whoseTurn].lastPlayed = cards
     if @players[@whoseTurn].hand.length == 0
       @gameOver = true
+      @scoreEngine.scoreGame(@players)
       return
     @whoseTurn += 1
     if @whoseTurn == 4
