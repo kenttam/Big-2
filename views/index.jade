@@ -26,7 +26,7 @@ block content
       a.btn.btn-primary(ng-click="pass()", ng-show="selectedCards().length == 0") Pass
     .clearfix
     h1 Center
-    .game-over-message.alert(ng-show="gameOver")
+    .game-over-message.alert(ng-show="gameOver && players[0].scoreHistory.length > 0")
       p Winner: Player {{winnerIndex + 1}}
     .playingCards
       a(ng-repeat="card in center", class="card rank-{{card.rank}} {{card.suit.toLowerCase()}}s", ng-class="{selected: card.selected}")

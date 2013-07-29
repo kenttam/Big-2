@@ -45,11 +45,12 @@ io.sockets.on('connection', (socket) ->
     joinRoom(socket, room)
     
   socket.on "startGame", ->
-    whoseTurn = currentGame[socket.id].start()
-    currentRoom = currentGame[socket.id].room
-    io.sockets.in(currentRoom).emit("update:turn", whoseTurn)
-    for socket in io.sockets.clients(currentRoom)
-      socket.emit("hand", players[socket.id].hand)
+    if currentGame[socket.id].gameOver
+      whoseTurn = currentGame[socket.id].start()
+      currentRoom = currentGame[socket.id].room
+      io.sockets.in(currentRoom).emit("update:turn", whoseTurn)
+      for socket in io.sockets.clients(currentRoom)
+        socket.emit("hand", players[socket.id].hand)
 
   socket.on "startTestGame", ->
     games["test"] = null

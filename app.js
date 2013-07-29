@@ -68,16 +68,18 @@
     });
     socket.on("startGame", function() {
       var currentRoom, whoseTurn, _i, _len, _ref, _results;
-      whoseTurn = currentGame[socket.id].start();
-      currentRoom = currentGame[socket.id].room;
-      io.sockets["in"](currentRoom).emit("update:turn", whoseTurn);
-      _ref = io.sockets.clients(currentRoom);
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        socket = _ref[_i];
-        _results.push(socket.emit("hand", players[socket.id].hand));
+      if (currentGame[socket.id].gameOver) {
+        whoseTurn = currentGame[socket.id].start();
+        currentRoom = currentGame[socket.id].room;
+        io.sockets["in"](currentRoom).emit("update:turn", whoseTurn);
+        _ref = io.sockets.clients(currentRoom);
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          socket = _ref[_i];
+          _results.push(socket.emit("hand", players[socket.id].hand));
+        }
+        return _results;
       }
-      return _results;
     });
     socket.on("startTestGame", function() {
       games["test"] = null;

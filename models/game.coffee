@@ -14,7 +14,7 @@ class Game
     @playersPassed = 0
     @cardsInCenter = []
     @history = []
-    @gameOver = false
+    @gameOver = true
     
   addPlayer: (player) ->
     if @players.length < 4 and player.constructor.name == "Player"
