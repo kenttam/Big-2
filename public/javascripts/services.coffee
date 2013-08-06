@@ -1,4 +1,4 @@
-angular.module('deuces', [], ($provide) ->
+window.deucesApp = angular.module('deuces', [], ($provide) ->
   $provide.factory 'socket', ($rootScope) ->
     socket = io.connect()
     return {

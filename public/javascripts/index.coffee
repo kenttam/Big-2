@@ -1,4 +1,4 @@
-window.RoomController = ($scope, socket) ->
+deucesApp.controller('RoomController', ['$scope', 'socket',  ($scope, socket) ->
   $scope.inRoom = false
   $scope.requestRoom = ->
     socket.emit('room', $scope.roomName)
@@ -10,8 +10,9 @@ window.RoomController = ($scope, socket) ->
   socket.on "nameResult", (data) ->
     if data.success
       $scope.playerName = data.name
+      ])
 
-window.GameController = ($scope, socket) ->
+deucesApp.controller('GameController', ['$scope', 'socket', ($scope, socket) ->
   socket.on "players:updated", (data) ->
     $scope.players = data.players
   $scope.startGame = ->
@@ -42,5 +43,6 @@ window.GameController = ($scope, socket) ->
     $scope.players = data.players
     $scope.gameOver = true
     $scope.winnerIndex = data.whoseTurn
+    ])
 
    
