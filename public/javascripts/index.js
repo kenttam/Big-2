@@ -22,7 +22,7 @@
   ]);
 
   deucesApp.controller('GameController', [
-    '$scope', 'socket', function($scope, socket) {
+    '$scope', 'socket', 'playerMap', function($scope, socket) {
       socket.on("players:updated", function(data) {
         return $scope.players = data.players;
       });

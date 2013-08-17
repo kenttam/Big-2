@@ -12,7 +12,7 @@ deucesApp.controller('RoomController', ['$scope', 'socket',  ($scope, socket) ->
       $scope.playerName = data.name
       ])
 
-deucesApp.controller('GameController', ['$scope', 'socket', ($scope, socket) ->
+deucesApp.controller('GameController', ['$scope', 'socket', 'playerMap', ($scope, socket) ->
   socket.on "players:updated", (data) ->
     $scope.players = data.players
   $scope.startGame = ->
@@ -44,5 +44,4 @@ deucesApp.controller('GameController', ['$scope', 'socket', ($scope, socket) ->
     $scope.gameOver = true
     $scope.winnerIndex = data.whoseTurn
     ])
-
    

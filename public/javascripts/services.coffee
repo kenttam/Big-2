@@ -18,5 +18,15 @@ window.deucesApp = angular.module('deuces', [], ($provide) ->
           )
         )
     }
+  $provide.factory 'playerMap', ($rootScope) ->
+    return (playerIndex, players) ->
+      directions = ["west", "north", "east"]
+      for x in [0...3]
+        currentPlayerIndex = playerIndex + x
+        unless currentPlayerIndex > 3
+          players[currentPlayerIndex].seat = directions[x]
+        else
+          players[currentPlayerIndex-4].seat = directions[x]
+      return players
 )
 
