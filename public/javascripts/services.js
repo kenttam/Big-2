@@ -32,7 +32,7 @@
         var currentPlayerIndex, directions, x, _i;
         directions = ["west", "north", "east"];
         for (x = _i = 0; _i < 3; x = ++_i) {
-          currentPlayerIndex = playerIndex + x;
+          currentPlayerIndex = playerIndex + x + 1;
           if (!(currentPlayerIndex > 3)) {
             players[currentPlayerIndex].seat = directions[x];
           } else {

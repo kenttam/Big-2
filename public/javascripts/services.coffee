@@ -22,7 +22,7 @@ window.deucesApp = angular.module('deuces', [], ($provide) ->
     return (playerIndex, players) ->
       directions = ["west", "north", "east"]
       for x in [0...3]
-        currentPlayerIndex = playerIndex + x
+        currentPlayerIndex = playerIndex + x + 1
         unless currentPlayerIndex > 3
           players[currentPlayerIndex].seat = directions[x]
         else
